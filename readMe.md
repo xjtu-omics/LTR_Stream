@@ -138,13 +138,15 @@ Each dot represent a pattern sequence that extracted from one or severl
 LTR-RTs. The color of the dot represents the lineage type which annotated
 at the right side. The black lines represent the reconstructed trajectories.
 <div align=center>
-<img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/e4d6ec59.png" width="300px" height="300px" align="center" />
+<img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/e4d6ec59.png" width="300px" height="285px" />
 </div>
 #### workDir/figure/finalInfo.tab
 Tab seperated file containing the details of `finalResult.gif`, including
 Name of LTR-RT, position in `finalResult.gif`, ID of branch, lineage from
 TESorter and insertion time from LTR_Retriever.
-![](.readMe_images/1a11f7df.png)
+<div align=center>
+<img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/1a11f7df.png" width="300px" height="52px" />
+</div>
 #### workDir/figure/tesorter.sta.csv
 Number of LTR-RTs of each lineage in each species.
 ![](.readMe_images/c3602f28.png)
