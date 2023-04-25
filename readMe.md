@@ -24,7 +24,7 @@ If mamba is not available, please run:
 ```shell
 cd ${ltrStreamInstallPath}/LTR_Stream && bash install_LTR_Stream.sh
 ```
-for a speeding up installation with mamba, please run:
+For a speeding up installation with mamba, please run:
 ```shell
 cd ${ltrStreamInstallPath}/LTR_Stream && bash install_LTR_Stream.sh mamba
 ```
@@ -134,7 +134,7 @@ The 3-D reconstructed trajectories of LTR-RTs.
 Each dot represent a pattern sequence that extracted from one or severl
 LTR-RTs. The color of the dot represents the lineage type which annotated
 at the right side. The black lines represent the reconstructed trajectories.
-![](.readMe_images/e4d6ec59.png)
+![test image size](.readMe_images/e4d6ec59.png)
 #### workDir/figure/finalInfo.tab
 Tab seperated file containing the details of `finalResult.gif`, including
 Name of LTR-RT, position in `finalResult.gif`, ID of branch, lineage from
@@ -154,7 +154,7 @@ Identified genetic markers on the reconstructed evolutionary trajectories.
 Summary of the identified genetic markers.
 ![](.readMe_images/5cb3625d.png)
 ##### kmeans_{k}.oriId.tsv
-LTR-RT level genetic marker annotation.
+LTR-RT level genetic marker annotation.  
 ![](.readMe_images/573a345a.png)
 ##### kmeans_{k}.enrichRegion.bed
 Bed formatted file that annotates genomic regions with enriched genetic markers.
