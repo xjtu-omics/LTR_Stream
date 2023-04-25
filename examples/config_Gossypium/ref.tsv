@@ -1,0 +1,5 @@
+speId	speName	chrNum	miu	source
+s001	Gossypium herbaceum	13	3.5e-9	https://www.cottongen.org/cottongen_downloads/Gossypium_herbaceum/A1_WHU/assembly/Gherbaceum_A1-0076_WHUv3.0rc.genome.standard.fa.gz
+s002	Gossypium hirsutum	26	3.5e-9	https://www.cottongen.org/cottongen_downloads/Gossypium_hirsutum/WHU-TM1_AD1_Updated/assembly/Ghirsutum_TM-1_WHU_genome.standard.fa.gz
+s003	Gossypium raimondii	13	3.5e-9	https://figshare.com/ndownloader/files/25304561
+s004	Gossypium barbadense	26	3.5e-9	https://www.cottongen.org/cottongen_downloads/Gossypium_barbadense/HEAU-Pima90_AD2genome/assembly/Pima90.fa.gz

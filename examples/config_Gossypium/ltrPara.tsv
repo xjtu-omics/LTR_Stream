@@ -1,0 +1,7 @@
+workDir	/data/home/testXT/testLTR_Stream/cotton/workDir
+refConfig	/data/home/testXT/testLTR_Stream/cotton/config/ref.tab
+minOverLapForNovelModule	0.8
+maxCNSPercentage	0.7
+nClustersForInitTree	30
+minNumInClusterForInitTree	20
+epgAlpha	0.1
