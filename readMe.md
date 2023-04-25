@@ -145,11 +145,14 @@ Tab seperated file containing the details of `finalResult.gif`, including
 Name of LTR-RT, position in `finalResult.gif`, ID of branch, lineage from
 TESorter and insertion time from LTR_Retriever.
 <div align=center>
-<img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/1a11f7df.png" width="300px" height="52px" />
+<img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/1a11f7df.png" width="600px" height="104px" />
 </div>
 #### workDir/figure/tesorter.sta.csv
 Number of LTR-RTs of each lineage in each species.
 ![](.readMe_images/c3602f28.png)
+<div align=center>
+<img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/1a11f7df.png" width="600px" height="104px" />
+</div>
 #### workDir/geneticMarkers
 ##### kmeans_{k}.circos.png
 Genomic distribution of identified genetic markers.
