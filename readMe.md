@@ -137,9 +137,8 @@ The 3-D reconstructed trajectories of LTR-RTs.
 Each dot represent a pattern sequence that extracted from one or severl
 LTR-RTs. The color of the dot represents the lineage type which annotated
 at the right side. The black lines represent the reconstructed trajectories.
-<div align=center>
-<img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/e4d6ec59.png" width="300px" height="285px" />
-</div>
+<div align=center><img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/e4d6ec59.png" width="300px" height="285px" />
+</div> <br/>
 #### workDir/figure/finalInfo.tab
 Tab seperated file containing the details of `finalResult.gif`, including
 Name of LTR-RT, position in `finalResult.gif`, ID of branch, lineage from
@@ -156,7 +155,7 @@ Number of LTR-RTs of each lineage in each species.
 ##### kmeans_{k}.circos.png
 Genomic distribution of identified genetic markers.
 <div align=center>
-<img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/geneticMarker.png" width="800px" height="800px" />
+<img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/geneticMarker.png" width="400px" height="400px" />
 </div>
 ##### kmeans_{k}.3D.gif
 Identified genetic markers on the reconstructed evolutionary trajectories.
