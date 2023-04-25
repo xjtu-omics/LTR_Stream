@@ -6,20 +6,20 @@ identifies potential genetic markers that may helpful for investigating their
 host genomes. Built upon Snakemake, LTR_Stream is an user-friendly and integral 
 pipeline handling procedures from genome downloading to genetic marker detection.
 ## Installation
-###Requirements
-####1.Conda 
+### Requirements
+#### 1.Conda 
 Conda should be installed with version >=23.1.0.  
 Mamba is recommended for speeding up conda.
-####2.Git
+#### 2.Git
 Please install git with version >=2.34.1.  
 Please configure the ssh key of git and make sure `git clone` could work.  
-###Install LTR_Stream
-####1.Clone LTR_Stream from github.
+### Install LTR_Stream
+#### 1.Clone LTR_Stream from github.
 ```shell
 ltrStreamInstallPath=path_you_want_to_install_LTR_Stream
 cd ${ltrStreamInstallPath} && git clone xxx
 ```
-####2.Run install script.
+#### 2.Run install script.
 If mamba is not available, please run:
 ```shell
 cd ${ltrStreamInstallPath}/LTR_Stream && bash install_LTR_Stream.sh
@@ -100,7 +100,7 @@ epgLambda 0.2
 epgMu 0.02
 epgAlpha 0.002
 ```
-####2.`ref.tsv` is a tsv file recording the information of genome assemblies.
+#### 2.`ref.tsv` is a tsv file recording the information of genome assemblies.
 ```tsv
 # An example for ref.tsv
 speId speName chrNum miu source
@@ -129,34 +129,34 @@ cd ${ltrStreamInstallPath}/LTR_Stream
 snakemake -s LTR_Stream.smk -f geneticMarkerDetect --config ltrParaFile=path_of_ltrPara.tsv -j {threadsNumber}
 ```
 ### Outputs
-####workDir/figure/finalResult.gif
+#### workDir/figure/finalResult.gif
 The 3-D reconstructed trajectories of LTR-RTs.
 Each dot represent a pattern sequence that extracted from one or severl
 LTR-RTs. The color of the dot represents the lineage type which annotated
 at the right side. The black lines represent the reconstructed trajectories.
 ![](.readMe_images/e4d6ec59.png)
-####workDir/figure/finalInfo.tab
+#### workDir/figure/finalInfo.tab
 Tab seperated file containing the details of `finalResult.gif`, including
 Name of LTR-RT, position in `finalResult.gif`, ID of branch, lineage from
 TESorter and insertion time from LTR_Retriever.
 ![](.readMe_images/1a11f7df.png)
-####workDir/figure/tesorter.sta.csv
+#### workDir/figure/tesorter.sta.csv
 Number of LTR-RTs of each lineage in each species.
 ![](.readMe_images/c3602f28.png)
-####workDir/geneticMarkers
-#####kmeans_{k}.circos.png
+#### workDir/geneticMarkers
+##### kmeans_{k}.circos.png
 Genomic distribution of identified genetic markers.
 ![](.readMe_images/geneticMarker.png)
-#####kmeans_{k}.3D.gif
+##### kmeans_{k}.3D.gif
 Identified genetic markers on the reconstructed evolutionary trajectories.
 ![](.readMe_images/035d4f7e.png)
-#####kmeans_{k}.summary.tsv
+##### kmeans_{k}.summary.tsv
 Summary of the identified genetic markers.
 ![](.readMe_images/5cb3625d.png)
-#####kmeans_{k}.oriId.tsv
+##### kmeans_{k}.oriId.tsv
 LTR-RT level genetic marker annotation.
 ![](.readMe_images/573a345a.png)
-#####kmeans_{k}.enrichRegion.bed
+##### kmeans_{k}.enrichRegion.bed
 Bed formatted file that annotates genomic regions with enriched genetic markers.
 <!--
 #### 2. Distribution of subtypes LTR-RT among genome.
