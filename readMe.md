@@ -152,7 +152,7 @@ TESorter and insertion time from LTR_Retriever.
 #### workDir/figure/tesorter.sta.csv
 Number of LTR-RTs of each lineage in each species.
 <div align=center>
-    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/c3602f28.png" width="435px" height="195px" />
+    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/c3602f28.png" width="334px" height="150px" />
 </div>
 
 #### workDir/geneticMarkers
@@ -165,19 +165,19 @@ Genomic distribution of identified genetic markers.
 ##### kmeans_{k}.3D.gif
 Identified genetic markers on the reconstructed evolutionary trajectories.
 <div align=center>
-    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/035d4f7e.png" width="600px" height="580px" />
+    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/035d4f7e.png" width="300px" height="290px" />
 </div>
 
 ##### kmeans_{k}.summary.tsv
 Summary of the identified genetic markers.
 <div align=center>
-    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/5cb3625d.png" width="248px" height="97px" />
+    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/5cb3625d.png" width="190px" height="74px" />
 </div>
 
 ##### kmeans_{k}.oriId.tsv
 LTR-RT level genetic marker annotation.  
 <div align=center>
-    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/573a345a.png" width="240px" height="146px" />
+    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/573a345a.png" width="184px" height="112px" />
 </div>
 
 ##### kmeans_{k}.enrichRegion.bed
