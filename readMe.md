@@ -152,7 +152,7 @@ TESorter and insertion time from LTR_Retriever.
 #### workDir/figure/tesorter.sta.csv
 Number of LTR-RTs of each lineage in each species.
 <div align=center>
-    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/c3602f28.png" width="334px" height="150px" />
+    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/c3602f28.png" width="500px" height="224px" />
 </div>
 
 #### workDir/geneticMarkers
