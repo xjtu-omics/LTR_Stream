@@ -108,11 +108,14 @@ s001 Oryza sativa_indica 12 1.3e-8  https://ftp.ncbi.nlm.nih.gov/genomes/genbank
 s002 Oryza alta 24 1.3e-8 /data/home/xutun/mei/rice/resources/originRef/GWHAZTO00000000.genome.fasta.gz
 s003 Oryza punctata 12 1.3e-8 https://ftp.ncbi.nlm.nih.gov/genomes/genbank/plant/Oryza_punctata/latest_assembly_versions/GCA_000573905.2_OpunRS2/GCA_000573905.2_OpunRS2_genomic.fna.gz
 s004 Oryza brachyantha 12 1.3e-8 https://ftp.ncbi.nlm.nih.gov/genomes/genbank/plant/Oryza_brachyantha/latest_assembly_versions/GCA_000231095.3_ObraRS2/GCA_000231095.3_ObraRS2_genomic.fna.gz
-# speId: An ID for species, should be started with an English letter, where only English letters and numbers are permitted.
+# speId: An ID for species, should be started with an English letter, where only English
+# letters and numbers are permitted.
 # speName: The Latin name of the species.
-# chrNum: Number of chromosomes used in the analysis, LTR_Stream automatically extracts the first chrNum sequences in the fasta file.
+# chrNum: Number of chromosomes used in the analysis, LTR_Stream automatically extracts 
+# the first chrNum sequences in the fasta file.
 # miu: Neutral mutation rate that used to estimate the insertion time of LTR-RTs.
-# source: The source of genome assemblies. It can be a download link or a path for local fasta file.
+# source: The source of genome assemblies. It can be a download link or a path for local
+# fasta file.
 # Can be fasta format or a compressed format (.gz).
 ```
 ### Usage
@@ -134,7 +137,9 @@ The 3-D reconstructed trajectories of LTR-RTs.
 Each dot represent a pattern sequence that extracted from one or severl
 LTR-RTs. The color of the dot represents the lineage type which annotated
 at the right side. The black lines represent the reconstructed trajectories.
-![test image size](.readMe_images/e4d6ec59.png)
+<div align=center>
+<img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/e4d6ec59.png" width="300px" height="300px" align="center" />
+</div>
 #### workDir/figure/finalInfo.tab
 Tab seperated file containing the details of `finalResult.gif`, including
 Name of LTR-RT, position in `finalResult.gif`, ID of branch, lineage from
