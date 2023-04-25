@@ -137,43 +137,47 @@ The 3-D reconstructed trajectories of LTR-RTs.
 Each dot represent a pattern sequence that extracted from one or severl
 LTR-RTs. The color of the dot represents the lineage type which annotated
 at the right side. The black lines represent the reconstructed trajectories.
-<div align=center><a><img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/e4d6ec59.png" width="300px" height="285px" /></a></div>
+<div align=center>
+    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/e4d6ec59.png" width="300px" height="285px" />
+</div>
 
 #### workDir/figure/finalInfo.tab
 Tab seperated file containing the details of `finalResult.gif`, including
 Name of LTR-RT, position in `finalResult.gif`, ID of branch, lineage from
 TESorter and insertion time from LTR_Retriever.
-<div align=center><a><img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/1a11f7df.png" width="600px" height="104px" /></a></div>
+<div align=center>
+    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/1a11f7df.png" width="460px" height="80px" />
+</div>
 
 #### workDir/figure/tesorter.sta.csv
 Number of LTR-RTs of each lineage in each species.
 <div align=center>
-<img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/c3602f28.png" width="435px" height="195px" />
+    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/c3602f28.png" width="435px" height="195px" />
 </div>
 
 #### workDir/geneticMarkers
 ##### kmeans_{k}.circos.png
 Genomic distribution of identified genetic markers.
 <div align=center>
-<img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/geneticMarker.png" width="400px" height="400px" />
+    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/geneticMarker.png" width="400px" height="400px" />
 </div>
 
 ##### kmeans_{k}.3D.gif
 Identified genetic markers on the reconstructed evolutionary trajectories.
 <div align=center>
-<img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/035d4f7e.png" width="600px" height="580px" />
+    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/035d4f7e.png" width="600px" height="580px" />
 </div>
 
 ##### kmeans_{k}.summary.tsv
 Summary of the identified genetic markers.
 <div align=center>
-<img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/5cb3625d.png" width="248px" height="97px" />
+    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/5cb3625d.png" width="248px" height="97px" />
 </div>
 
 ##### kmeans_{k}.oriId.tsv
 LTR-RT level genetic marker annotation.  
 <div align=center>
-<img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/573a345a.png" width="240px" height="146px" />
+    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/573a345a.png" width="240px" height="146px" />
 </div>
 
 ##### kmeans_{k}.enrichRegion.bed
