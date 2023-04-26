@@ -7,7 +7,7 @@ host genomes. Built upon Snakemake, LTR_Stream is an user-friendly and integral
 pipeline handling procedures from genome downloading to genetic marker detection.
 
 <div align=center>
-    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/cotton_geneticMarker.gif" width="300px" height="207px" /> <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/geneticMarker.png" width="300px" height="300px"/>
+    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/cotton_geneticMarker.gif" width="435px" height="300px" /> <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/geneticMarker.png" width="300px" height="300px"/>
 </div>
 
 ## Installation
