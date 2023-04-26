@@ -5,6 +5,11 @@ that you are interested in. Based on these trajectories, LTR_Stream further
 identifies potential genetic markers that may helpful for investigating their 
 host genomes. Built upon Snakemake, LTR_Stream is an user-friendly and integral 
 pipeline handling procedures from genome downloading to genetic marker detection.
+
+<div align=center>
+    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/cotton_geneticMarker.gif" width="300px" height="207px" />
+</div>
+
 ## Installation
 ### Requirements
 #### 1.Conda 
