@@ -8,7 +8,7 @@ downloading to genetic marker detection.
 ## Graphical Abstract
 
 <div align=center>
-    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/f3d321d7.png" width="400px" height="400px" />
+    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/f3d321d7.png" width="350px" height="400px" />
 </div>
 
 ## Genome Specific Markers for Four Gossypium Species
