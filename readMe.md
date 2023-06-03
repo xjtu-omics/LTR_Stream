@@ -1,11 +1,17 @@
 # LTR_Stream
-LTR_Stream reconstructs evolutionary trajectories and gives a sub-lineage 
-level classification for LTR-RTs that identified from one or several species 
-that you are interested in. Based on these trajectories, LTR_Stream further 
-identifies potential genetic markers that may helpful for investigating their 
-host genomes. Built upon Snakemake, LTR_Stream is an user-friendly and integral 
-pipeline handling procedures from genome downloading to genetic marker detection.
+LTR_Stream was designed for reconstructing evolutionary trajectories for LTR-RTs
+in closely related species and identifying genome (or sub-genome) specific genetic
+LTR-RT markers for genomic comparison and phylogeny inferring. Built upon Snakemake,
+LTR_Stream is an user-friendly and integral pipeline handling procedures from genome
+downloading to genetic marker detection. 
 
+## Graphical Abstract
+
+<div align=center>
+    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/" width="300px" height="300px" />
+</div>
+
+## Genome Specific Markers for Four Gossypium Species
 <div align=center>
     <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/cotton_geneticMarker.gif" width="435px" height="300px" /> <img src="https://github.com/xjtu-omics/LTR_Stream/blob/master/.readMe_images/geneticMarker.png" width="300px" height="300px"/>
 </div>
@@ -35,6 +41,19 @@ cd ${ltrStreamInstallPath}/LTR_Stream && bash install_LTR_Stream.sh mamba
 ```
 
 ## Quick start
+#### 1. LTR-RT evolutionary trajectories reconstruction and classification
+```shell
+conda activate ltrStream
+cd ${ltrStreamInstallPath}/LTR_Stream
+snakemake -s LTR_Stream.smk -f stream --config ltrParaFile=path_of_ltrPara.tsv -j {threadsNumber}
+```
+#### 2. Genetic maker detection
+```shell
+conda activate ltrStream
+cd ${ltrStreamInstallPath}/LTR_Stream
+snakemake -s LTR_Stream.smk -f geneticMarkerDetect --config ltrParaFile=path_of_ltrPara.tsv -j {threadsNumber}
+```
+
 ### Config files
 #### 1.`ltrPara.tsv`
 Two config files should be prepared for running LTR_Stream.  
@@ -124,18 +143,7 @@ s004 Oryza brachyantha 12 1.3e-8 https://ftp.ncbi.nlm.nih.gov/genomes/genbank/pl
 # Can be fasta format or a compressed format (.gz).
 ```
 ### Usage
-#### 1. LTR-RT evolutionary trajectories reconstruction and classification
-```shell
-conda activate ltrStream
-cd ${ltrStreamInstallPath}/LTR_Stream
-snakemake -s LTR_Stream.smk -f stream --config ltrParaFile=path_of_ltrPara.tsv -j {threadsNumber}
-```
-#### 2. Genetic maker detection
-```shell
-conda activate ltrStream
-cd ${ltrStreamInstallPath}/LTR_Stream
-snakemake -s LTR_Stream.smk -f geneticMarkerDetect --config ltrParaFile=path_of_ltrPara.tsv -j {threadsNumber}
-```
+
 ### Outputs
 #### workDir/figure/finalResult.gif
 The 3-D reconstructed trajectories of LTR-RTs.
