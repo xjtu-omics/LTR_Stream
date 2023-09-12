@@ -78,6 +78,13 @@ def selectLTR_RT():
         muscle -align {selectedFastaFile} -output {alignedFastaFile}
     ''')
     """
+    align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
+    align.add_sequence("Alpha", "ACTGCTAGCTAG")
+    align.add_sequence("Beta", "ACT-CTAGCTAG")
+    align.add_sequence("Gamma", "ACTGCTAGATAG")
+
+    summary_align = AlignInfo.SummaryInfo(align)
+    consensus = summary_align.dumb_consensus()
     alignment = AlignIO.read(alignedFastaFile, 'fasta')
     summary_align = AlignInfo.SummaryInfo(alignment)
     print(summary_align.dumb_consensus(1))
