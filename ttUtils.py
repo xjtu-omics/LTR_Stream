@@ -3,11 +3,12 @@ from collections import defaultdict
 import pandas as pd
 import sys
 import yaml
-
-with open('envConfig.yaml', 'r') as of:
-    ttPara = yaml.safe_load(of)
-    sys.path.append(ttPara['LTR_Stream'])
-
+try:
+    with open('envConfig.yaml', 'r') as of:
+        ttPara = yaml.safe_load(of)
+        sys.path.append(ttPara['LTR_Stream'])
+except:
+    sys.path.append('/data/home/testXT/LTR_Stream')
 import ttStream
 import networkx as nx
 

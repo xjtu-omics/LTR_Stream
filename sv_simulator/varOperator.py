@@ -1,3 +1,3 @@
-class var_operator:
+class varOperator:
     def __init__(self):
-        self.
+        pass

@@ -1,8 +1,8 @@
 class meier:
-    def __init__(self, seq, born_time, update_time=None):
+    def __init__(self, seq, bornTime, updateTime=None):
         self.seq = seq
-        self.born_time = born_time
-        self.update_time = born_time if self.update_time is None \
-            else update_time
+        self.bornTime = bornTime
+        self.updateTime = bornTime if self.updateTime is None \
+            else updateTime
 
 
