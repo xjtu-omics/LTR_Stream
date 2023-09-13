@@ -100,7 +100,7 @@ def generateSimulatedFasta():
     maxPopSize=3000
     ranSvP = 1e-9
     yearStep = 1e5
-    cpP = 0.01
+    cpP = 0.0001
 
 
     selectedFastaFile = f'{dataD}/selected.fasta'
@@ -118,12 +118,11 @@ def generateSimulatedFasta():
                               ranSvP=ranSvP,
                               yearStep=yearStep,
                               cpP = cpP)
-
+        mySimer.simulate()
+        break
 
     consensusFa.close()
     selectedFa.close()
-
-
 
 # plotLenDensity()
 generateSimulatedFasta()
