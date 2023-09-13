@@ -16,6 +16,8 @@ from ttUtils import getOriId2tesorterClass
 from ttUtils import seqName2bainfo
 
 baseD = '/data/home/testXT/workData/simulateMeiSv'
+dataD = f'{baseD}/selectLTR_RT'
+
 
 def plotLenDensity():
     # Tekay of rice s001 was selected.
@@ -38,12 +40,13 @@ def selectLTR_RT():
     oriId2teClassTsv = '/data/home/testXT/testLTR_Stream/rice/workDir/tesorter/s001.tesorter.out.cls.tsv'
     oriId2teClass = getOriId2tesorterClass(oriId2teClassTsv)
     refFaFile = '/data/home/testXT/testLTR_Stream/rice/workDir/ref/s001.ref.fa'
-    dataD = f'{baseD}/selectLTR_RT'
     selectedFastaFile = f'{dataD}/selected.fasta'
     alignedFastaFile = f'{dataD}/aligned.fasta'
+    consensusFastaFile = f'{dataD}/consensus.fasta'
     refFa = pysam.FastaFile(refFaFile)
 
     """
+    # Generate aligned fasta
     tarLenDict = dict(_8k=(8000, 9000),
                       _12k=(11800, 12200),
                       _15k=(14500, 15500))
@@ -78,24 +81,49 @@ def selectLTR_RT():
         muscle -align {selectedFastaFile} -output {alignedFastaFile}
     ''')
     """
-    align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
-    align.add_sequence("Alpha", "ACTGCTAGCTAG")
-    align.add_sequence("Beta", "ACT-CTAGCTAG")
-    align.add_sequence("Gamma", "ACTGCTAGATAG")
 
-    summary_align = AlignInfo.SummaryInfo(align)
-    consensus = summary_align.dumb_consensus()
     alignment = AlignIO.read(alignedFastaFile, 'fasta')
     summary_align = AlignInfo.SummaryInfo(alignment)
-    print(summary_align.dumb_consensus(1))
+    consensusSeq = str(summary_align.dumb_consensus(1)).upper()
+    consensusSeq = consensusSeq.split('X')
+    consensusSeq = ''.join(consensusSeq)
+    with open(consensusFastaFile, 'w') as of:
+        print('>consensus', file=of)
+        print(consensusSeq, file=of)
+
+def generateSimulatedFasta():
+    from svSimulator import svSimulator
+
+    # selectLTR_RT()
 
 
+    maxPopSize=3000
+    ranSvP = 1e-9
+    yearStep = 1e5
+    cpP = 0.01
 
 
+    selectedFastaFile = f'{dataD}/selected.fasta'
+    consensusFastaFile = f'{dataD}/consensus.fasta'
+
+    consensusFa = pysam.FastaFile(consensusFastaFile)
+    selectedFa = pysam.FastxFile(selectedFastaFile)
+    consensusSeq = consensusFa.fetch('consensus')
+    for read in selectedFa:
+        tarSeq = read.sequence.upper()
+        oriSeq = consensusSeq.upper()
+        mySimer = svSimulator(maxPopSize=maxPopSize,
+                              oriSeq=oriSeq,
+                              tarSeq=tarSeq,
+                              ranSvP=ranSvP,
+                              yearStep=yearStep,
+                              cpP = cpP)
 
 
+    consensusFa.close()
+    selectedFa.close()
 
 
 
 # plotLenDensity()
-selectLTR_RT()
+generateSimulatedFasta()
