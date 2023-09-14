@@ -7,13 +7,13 @@ class meiPopulation:
         self.meiSet.add(mei)
 
     def __iter__(self):
-        i = 0
-        while i<100:
-            yield i
-            i += 1
+        teList = [te for te in self.meiSet]
+        sortedTeList = sorted(teList, key=lambda x:x.id)
+        for te in sortedTeList:
+            yield te
 
     def reachMaxPopSize(self):
-        return False
+        return len(self.meiSet)>=self.maxPopSize
 
     def getPopSize(self):
         return len(self.meiSet)

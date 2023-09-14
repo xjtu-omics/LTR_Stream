@@ -96,12 +96,12 @@ def generateSimulatedFasta():
 
     # selectLTR_RT()
 
-
-    maxPopSize=3000
+    cpuNum=36
+    #ttt
+    maxPopSize=2
     ranSvP = 1e-9
-    yearStep = 1e5
+    yearStep = 2e4
     cpP = 0.0001
-
 
     selectedFastaFile = f'{dataD}/selected.fasta'
     consensusFastaFile = f'{dataD}/consensus.fasta'
@@ -117,7 +117,8 @@ def generateSimulatedFasta():
                               tarSeq=tarSeq,
                               ranSvP=ranSvP,
                               yearStep=yearStep,
-                              cpP = cpP)
+                              cpP = cpP,
+                              cpuNum=cpuNum)
         mySimer.simulate()
         break
 
