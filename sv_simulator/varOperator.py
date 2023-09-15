@@ -5,11 +5,11 @@ from Bio.pairwise2 import format_alignment
 
 
 class varOperator:
-    def __init__(self, cpP, tarSeq, yearStep):
+    def __init__(self, cpP, tarSeq, yearStep, minSvLen):
         self.cpP = cpP
         self.tarSeq = tarSeq
         self.yearStep = yearStep
-        self.minSvLen = 20
+        self.minSvLen = minSvLen
 
     def adjustCpNumByYear(self, te, nowYear, cpNum):
         return int(cpNum/((nowYear-te.bornTime)/self.yearStep))
@@ -27,9 +27,60 @@ class varOperator:
             te.addCpedNum(1)
         return retList
 
+    def getAlnScore(self, oriSeq):
+        aln = pairwise2.align.globalxs(oriSeq, self.tarSeq, -1, -0.2)[0]
+        return aln.score
+
     def dirSv(self, oriSeq, dirSvTyp, dirSvPos):
         aln = pairwise2.align.globalxs(oriSeq, self.tarSeq, -1, -0.2)[0]
         alnedOriSeq, alnedTarSeq = aln.seqA, aln.seqB
 
-        return oriSeq
+        ooPos = 0
+        svOpFlag = False
 
+        dirSvAlnPos = -1
+        for i in range(len(alnedOriSeq)):
+            if ooPos>=dirSvPos:
+                dirSvOriPos = i
+                break
+            if alnedOriSeq[i] != '-':
+                ooPos += 1
+
+        oriWinFlag = False
+        tarWinFlag = False
+        oriWinSt = 0
+        tarWinSt = 0
+        opObj = None
+        opAlnSt = None
+        opAlnEd = None
+        for i in range(dirSvAlnPos, len(alnedOriSeq)):
+            if not oriWinFlag:
+                if alnedOriSeq[i] == '-':
+                    oriWinFlag = True
+                    oriWinSt = i
+            else:
+                if alnedOriSeq[i] != '-':
+                    if i-oriWinSt>=self.minSvLen:
+                        opObj, opAlnSt, opAlnEd = 'ori', oriWinSt, i
+                        break
+                    else:
+                        oriWinFlag = False
+            if not tarWinFlag:
+                if alnedTarSeq[i] == '-':
+                    tarWinFlag = True
+                    tarWinSt = i
+            else:
+                if alnedTarSeq[i] != '-':
+                    if i-tarWinSt>=self.minSvLen:
+                        opObj, opAlnSt, opAlnEd = 'tar', tarWinSt, i
+                        break
+                    else:
+                        tarWinFlag = False
+        retSeq = None
+        if opObj is None:
+            retSeq = oriSeq
+        elif opObj == 'tar':
+            retSeq = ''.join((alnedOriSeq[:opAlnSt]+alnedOriSeq[opAlnEd:]).split('-'))
+        else:
+            retSeq = ''.join((alnedOriSeq[:opAlnSt]+alnedTarSeq[opAlnSt:opAlnEd]+alnedOriSeq[opAlnEd:]).split('-'))
+        return retSeq

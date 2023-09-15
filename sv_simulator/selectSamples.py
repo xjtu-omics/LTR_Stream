@@ -91,17 +91,16 @@ def selectLTR_RT():
         print('>consensus', file=of)
         print(consensusSeq, file=of)
 
-def generateSimulatedFasta():
+def generateSimulatedFasta(minSvLen):
     from svSimulator import svSimulator
 
     # selectLTR_RT()
 
-    cpuNum=36
-    #ttt
-    maxPopSize=2
+    cpuNum=48
+    maxPopSize=3000
     ranSvP = 1e-9
-    yearStep = 2e4
-    cpP = 0.0001
+    yearStep = 3e5
+    cpP = 4e-6
 
     selectedFastaFile = f'{dataD}/selected.fasta'
     consensusFastaFile = f'{dataD}/consensus.fasta'
@@ -118,7 +117,8 @@ def generateSimulatedFasta():
                               ranSvP=ranSvP,
                               yearStep=yearStep,
                               cpP = cpP,
-                              cpuNum=cpuNum)
+                              cpuNum=cpuNum,
+                              minSvLen=minSvLen)
         mySimer.simulate()
         break
 
@@ -126,4 +126,4 @@ def generateSimulatedFasta():
     selectedFa.close()
 
 # plotLenDensity()
-generateSimulatedFasta()
+generateSimulatedFasta(int(sys.argv[1]))
