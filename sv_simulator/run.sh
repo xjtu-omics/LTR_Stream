@@ -1,0 +1,1 @@
+nohup python selectSamples.py 200 1000 >rec 2>&1 &

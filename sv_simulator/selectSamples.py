@@ -9,6 +9,7 @@ from Bio.Seq import Seq
 from Bio import AlignIO
 from Bio.Align import AlignInfo
 import pysam
+import numpy as np
 
 import sys
 import os
@@ -91,16 +92,18 @@ def selectLTR_RT():
         print('>consensus', file=of)
         print(consensusSeq, file=of)
 
-def generateSimulatedFasta(minSvLen):
+def generateSimulatedFasta(minSvLen, maxSvLen=None, svGenTyp=None):
     from svSimulator import svSimulator
 
     # selectLTR_RT()
 
-    cpuNum=48
-    maxPopSize=3000
+    cpuNum=40
+    maxPopSize=1000
     ranSvP = 1e-9
     yearStep = 3e5
     cpP = 4e-6
+    np.random.seed(51)
+
 
     selectedFastaFile = f'{dataD}/selected.fasta'
     consensusFastaFile = f'{dataD}/consensus.fasta'
@@ -108,22 +111,33 @@ def generateSimulatedFasta(minSvLen):
     consensusFa = pysam.FastaFile(consensusFastaFile)
     selectedFa = pysam.FastxFile(selectedFastaFile)
     consensusSeq = consensusFa.fetch('consensus')
-    for read in selectedFa:
-        tarSeq = read.sequence.upper()
-        oriSeq = consensusSeq.upper()
-        mySimer = svSimulator(maxPopSize=maxPopSize,
-                              oriSeq=oriSeq,
-                              tarSeq=tarSeq,
-                              ranSvP=ranSvP,
-                              yearStep=yearStep,
-                              cpP = cpP,
-                              cpuNum=cpuNum,
-                              minSvLen=minSvLen)
-        mySimer.simulate()
-        break
+    with open('simulatedTe.fa', 'w') as of:
+        for i, read in enumerate(selectedFa):
+            tarSeq = read.sequence.upper()
+            oriSeq = consensusSeq.upper()
+            mySimer = svSimulator(maxPopSize=maxPopSize,
+                                  oriSeq=oriSeq,
+                                  oriSeqName=f'{i}',
+                                  tarSeq=tarSeq,
+                                  ranSvP=ranSvP,
+                                  yearStep=yearStep,
+                                  cpP = cpP,
+                                  cpuNum=cpuNum,
+                                  minSvLen=minSvLen,
+                                  maxSvLen=maxSvLen)
+            mySimer.simulate(svGenTyp=svGenTyp)
+            mySimer.meiPop.printFasta(year=None, of=of)
+        # break
 
     consensusFa.close()
     selectedFa.close()
 
+
+
+# Select proper TE with significantly different length.
 # plotLenDensity()
-generateSimulatedFasta(int(sys.argv[1]))
+
+# Test Directed SV by Set a min rectifying gap size.
+# generateSimulatedFasta(int(sys.argv[1]))
+
+generateSimulatedFasta(int(sys.argv[1]), int(sys.argv[2]), 'sub')

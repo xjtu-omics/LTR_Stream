@@ -5,82 +5,72 @@ from Bio.pairwise2 import format_alignment
 
 
 class varOperator:
-    def __init__(self, cpP, tarSeq, yearStep, minSvLen):
+    def __init__(self, cpP, tarSeq, yearStep, minSvLen, maxSvLen):
         self.cpP = cpP
         self.tarSeq = tarSeq
         self.yearStep = yearStep
         self.minSvLen = minSvLen
+        self.maxSvLen = maxSvLen
 
     def adjustCpNumByYear(self, te, nowYear, cpNum):
         return int(cpNum/((nowYear-te.bornTime)/self.yearStep))
 
-    def geneSvedSeq(self, te, nowYear, cpNum, dirSvTypList, dirSvPosList):
+    def geneSvedSeq(self, te, nowYear, cpNum, dirSvPosList, dirSvLenList, svGenTyp):
         retList = []
         retList.append(te)
         cpNum = self.adjustCpNumByYear(te, nowYear, cpNum)
         for i in range(cpNum):
             nte = deepcopy(te)
             nte.id = f'{nte.id}_{te.cpedNum}'
-            nte.seq = self.dirSv(nte.seq, dirSvTypList[i], dirSvPosList[i])
+            nte.cpedNum = 0
+            nte.seq, nte.identity = self.dirSv(nte.seq, dirSvPosList[i], dirSvLenList[i], svGenTyp)
             nte.bornTime = nowYear
             retList.append(deepcopy(nte))
             te.addCpedNum(1)
         return retList
 
     def getAlnScore(self, oriSeq):
+        # Dangerours to use for seq with lenth more than 10k
         aln = pairwise2.align.globalxs(oriSeq, self.tarSeq, -1, -0.2)[0]
         return aln.score
 
-    def dirSv(self, oriSeq, dirSvTyp, dirSvPos):
-        aln = pairwise2.align.globalxs(oriSeq, self.tarSeq, -1, -0.2)[0]
-        alnedOriSeq, alnedTarSeq = aln.seqA, aln.seqB
+    def calIdentity(self, alnedSeq1, alnedSeq2, nomLen):
+        identicalNum = 0
+        for ca,cb in zip(alnedSeq1, alnedSeq2):
+            if ca==cb:
+                identicalNum+=1
+        return identicalNum/nomLen
 
-        ooPos = 0
-        svOpFlag = False
+    def dirSv(self, oriSeq, dirSvPos, dirSvLen, svGenTyp):
+        # 2023091815:19 Remove original global alignment that can be used for gap reconmendation
+        # Only for substitutiom mode.
+        if svGenTyp is None:
+            raise 'Do not support gap reconmendation directed SV mode!'
+
+        anchorLen = 1000
+        toAlnEdPos = min(len(oriSeq), dirSvPos + dirSvLen + anchorLen)
+        toAlnStPos = max(0, dirSvPos-anchorLen)
+        preAnchorSize = min(anchorLen, dirSvPos)
+
+        tarOriSeq = oriSeq[toAlnStPos:toAlnEdPos]
+        aln = pairwise2.align.globalms(tarOriSeq, self.tarSeq, 2, -1, -100, -0.2)[0]
+        alnedOriSeq, alnedTarSeq = aln.seqA, aln.seqB
+        identity = self.calIdentity(alnedOriSeq, alnedTarSeq, toAlnEdPos-toAlnStPos)
 
         dirSvAlnPos = -1
+        ooPos = 0
         for i in range(len(alnedOriSeq)):
-            if ooPos>=dirSvPos:
-                dirSvOriPos = i
+            if ooPos>=preAnchorSize:
+                dirSvAlnPos = i
                 break
             if alnedOriSeq[i] != '-':
                 ooPos += 1
 
-        oriWinFlag = False
-        tarWinFlag = False
-        oriWinSt = 0
-        tarWinSt = 0
-        opObj = None
-        opAlnSt = None
-        opAlnEd = None
-        for i in range(dirSvAlnPos, len(alnedOriSeq)):
-            if not oriWinFlag:
-                if alnedOriSeq[i] == '-':
-                    oriWinFlag = True
-                    oriWinSt = i
-            else:
-                if alnedOriSeq[i] != '-':
-                    if i-oriWinSt>=self.minSvLen:
-                        opObj, opAlnSt, opAlnEd = 'ori', oriWinSt, i
-                        break
-                    else:
-                        oriWinFlag = False
-            if not tarWinFlag:
-                if alnedTarSeq[i] == '-':
-                    tarWinFlag = True
-                    tarWinSt = i
-            else:
-                if alnedTarSeq[i] != '-':
-                    if i-tarWinSt>=self.minSvLen:
-                        opObj, opAlnSt, opAlnEd = 'tar', tarWinSt, i
-                        break
-                    else:
-                        tarWinFlag = False
-        retSeq = None
-        if opObj is None:
-            retSeq = oriSeq
-        elif opObj == 'tar':
-            retSeq = ''.join((alnedOriSeq[:opAlnSt]+alnedOriSeq[opAlnEd:]).split('-'))
-        else:
-            retSeq = ''.join((alnedOriSeq[:opAlnSt]+alnedTarSeq[opAlnSt:opAlnEd]+alnedOriSeq[opAlnEd:]).split('-'))
-        return retSeq
+        dirSvedSeq = oriSeq[:dirSvPos]
+        for i in range(dirSvAlnPos, min(dirSvAlnPos+dirSvLen, len(alnedOriSeq))):
+            if alnedTarSeq[i] != '-':
+                dirSvedSeq += alnedTarSeq[i]
+            if alnedOriSeq[i] != '-':
+                ooPos += 1
+        dirSvedSeq += oriSeq[(toAlnStPos+ooPos):]
+        return dirSvedSeq, identity

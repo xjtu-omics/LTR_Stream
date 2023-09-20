@@ -7,6 +7,9 @@ class meier:
             else updateTime
         self.cpedNum = 0
 
+        #For dev
+        self.identity = 0
+
     def __hash__(self):
         return hash(self.id)
 

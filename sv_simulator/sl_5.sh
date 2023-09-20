@@ -1,1 +1,0 @@
-/data/home/testXT/miniconda3/envs/ltrStream/bin/python3.7 /data/home/testXT/LTR_Stream/sv_simulator/selectSamples.py 5 >/data/home/testXT/LTR_Stream/sv_simulator/testOut.5

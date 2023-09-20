@@ -19,11 +19,26 @@ envDirs = []
 baseD = sys.argv[1]
 labelFile = sys.argv[2]
 refConfig = sys.argv[3]
+if refConfig=='None':
+    refConfig = None
 minNumInClusterForInitTree = int(sys.argv[4])
 epgLambda = float(sys.argv[5])
 epgAlpha = float(sys.argv[6])
 epgMu = float(sys.argv[7])
 nClusterForInitTree = int(sys.argv[8])
+
+tesorterOutFile = None
+try:
+    tesorterOutFile = sys.argv[9]
+except:
+    pass
+
+ltrFastaFile = None
+try:
+    ltrFastaFile = sys.argv[10]
+except:
+    pass
+
 
 
 envDirs.append(baseD)
@@ -69,8 +84,8 @@ st.plot_dimension_reduction(adata_low,color=['label'],n_components=3,show_graph=
 ttStream.saveWorkData(adata_low,f'{danteD}/tot.pgl.hdf5')
 # Output finalInfo.csv
 branchIdList = adata_low.obs['branch_id'].to_list()
-oriId2insertTime = ttDb.getOriId2insertTime(refConfig,f'{baseD}/ltrRetriever')
-oriId2teClass = ttDb.getOriId2tesorterClass(refConfig,tesorterD)
+oriId2insertTime = ttDb.getOriId2insertTime(refConfig,f'{baseD}/ltrRetriever', ltrFastaFile)
+oriId2teClass = ttDb.getOriId2tesorterClass(refConfig, tesorterD, tesorterOutFile)
 oriId2modId = ttUtils.getOriId2modId(f'{danteD}/finalModSeq.tab', f'{danteD}/toCalRest.modSeq2modId.tab')
 pcoaData = pd.read_table(f'{danteD}/toCalRest.distanceMat.csv',header=None,sep=',')
 pcoaData = pcoaData.iloc[:,0:3]

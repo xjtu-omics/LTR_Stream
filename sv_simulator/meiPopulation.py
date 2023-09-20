@@ -1,3 +1,4 @@
+import numpy as np
 class meiPopulation:
     def __init__(self, maxPopSize):
         self.maxPopSize = maxPopSize
@@ -17,3 +18,16 @@ class meiPopulation:
 
     def getPopSize(self):
         return len(self.meiSet)
+
+    def getMeanIdentity(self, year):
+        identityList = []
+        for te in self.meiSet:
+            if te.id != '0' and te.bornTime==year:
+                identityList.append(te.identity)
+        return np.mean(identityList)
+
+    def printFasta(self, year, of):
+        for te in self.meiSet:
+            if (year is None) or te.bornTime==year:
+                print(f'>{te.id}:0-{len(te.seq)}(+)', file=of)
+                print(te.seq, file=of)

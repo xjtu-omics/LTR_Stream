@@ -1,5 +1,5 @@
 ---
 LTR_Stream:  "/data/home/testXT/LTR_Stream"
-danteEnv:  "/data/home/testXT/LTR_Stream/dante"
+danteEnv:  "/data/home/testXT/LTR_Stream/dante/dante"
 ltrHarvestEnv:  "/data/home/testXT/miniconda3/bin/../envs/ltrHarvestEnv/bin"
 ltrFinderEnv:  "/data/home/testXT/LTR_Stream/ltrFinder/LTR_FINDER_parallel"
