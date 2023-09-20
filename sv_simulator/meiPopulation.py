@@ -29,5 +29,5 @@ class meiPopulation:
     def printFasta(self, year, of):
         for te in self.meiSet:
             if (year is None) or te.bornTime==year:
-                print(f'>{te.id}:0-{len(te.seq)}(+)', file=of)
+                print(f'>{te.id}', file=of)
                 print(te.seq, file=of)

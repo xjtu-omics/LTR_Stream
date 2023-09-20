@@ -97,12 +97,12 @@ def generateSimulatedFasta(minSvLen, maxSvLen=None, svGenTyp=None):
 
     # selectLTR_RT()
 
-    cpuNum=40
+    cpuNum=200
     maxPopSize=1000
     ranSvP = 1e-9
     yearStep = 3e5
     cpP = 4e-6
-    np.random.seed(51)
+    np.random.seed(52)
 
 
     selectedFastaFile = f'{dataD}/selected.fasta'

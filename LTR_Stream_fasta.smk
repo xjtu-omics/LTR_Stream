@@ -11,7 +11,7 @@ import ttDb
 import ttlib
 
 paraDict = ttConfiger.getParaDict(config['ltrParaFile'])
-ltrFasta = paraDict['ltrFasta']
+inputFasta = paraDict['ltrFasta']
 
 #ttt
 refFasta = '/data/home/testXT/testLTR_Stream/simulate2/workDir/ref.fa'
@@ -106,6 +106,8 @@ def prepareWorkDir():
     ttlib.constructEnv(envDirs)
 prepareWorkDir()
 
+ltrFasta = f'{baseD}/ltr.fa'
+
 rule tar:
     input: f'{statusD}/tesorter.ok',
            f'{statusD}/dante.ok',
@@ -113,8 +115,21 @@ rule tar:
            f'{statusD}/calModSeqDistance.ok',
            f'{statusD}/stream.ok'
 
+rule geneLtrFasta:
+    input: inputFasta
+    output: f'{statusD}/geneLtrFasta.ok'
+    run:
+        import pysam
+        with pysam.FastxFile(inputFasta) as iFa, open(ltrFasta,'w') as of:
+            for te in iFa:
+                print(f'>{te.name}:0-{len(te.sequence)}(+)', file=of)
+                print(te.sequence, file=of)
+        shell('''
+            touch {output}
+        ''')
+
 rule tesorter:
-    input:  ltrFasta
+    input:  f'{statusD}/geneLtrFasta.ok'
     output: f'{statusD}/tesorter.ok'
     threads:    44
     run:
@@ -124,17 +139,15 @@ rule tesorter:
             rm -rf {outPre}*
             rm -rf {workTmp}
         ''')
-        ltrFasta = input[0]
         shell(f'''
             TEsorter -pre {outPre} -p {threads} -tmp {workTmp} -nocln {ltrFasta}
             touch {output}
         ''')
 rule dante:
-    input:  ltrFasta
+    input:  f'{statusD}/geneLtrFasta.ok'
     output: f'{statusD}/dante.ok'
     threads:    4
     run:
-        ltrFasta = input[0]
         pdbFile = f'{danteEnv}/tool-data/protein_domains/Viridiplantae_v3.0_pdb'
         classTblFile = f'{danteEnv}/tool-data/protein_domains/Viridiplantae_v3.0_class'
         outGff = f'{danteD}/ltrAnnot.gff'
