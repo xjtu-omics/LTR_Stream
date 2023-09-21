@@ -234,6 +234,7 @@ rule novelBlast:
                 blastn -query {fastaF} -db {blastDb} -evalue 1e-10 -out {outF} -num_threads {threads} -outfmt 6 -max_target_seqs 100
                 touch {output}
         ''')
+
 rule selectNovelUnits:
     input:  f'{statusD}/novelBlast.ok'
     output: f'{statusD}/selectNovelUnits.ok'
@@ -245,6 +246,7 @@ rule selectNovelUnits:
         from ttUtils import getAlignedId, seqName2bainfo, seqName2len, bainfo2seqName
         minUnitLen = 100
         minMinOverlap = minOverLapForNovelModule
+        print('test:', minMinOverlap)
         blastRelF = f'{danteD}/toCalRest.blastSelf.tab'
         alignedIdSet = defaultdict(int)
         alignedId2originalId = defaultdict(str)

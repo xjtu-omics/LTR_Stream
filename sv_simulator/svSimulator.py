@@ -34,7 +34,6 @@ class svSimulator:
         for cpNum, te in zip(cpNumList, self.meiPop):
             dirSvPosList.append(np.random.randint(len(te.seq), size=cpNum))
         return dirSvPosList
-
     def initDirSvLenList(self, cpNumList, svGenTyp):
         dirSvLenList = []
         if svGenTyp=='sub':
@@ -44,31 +43,31 @@ class svSimulator:
             for cpNum in cpNumList:
                 dirSvLenList.append([ None for i in range(cpNum)])
         return dirSvLenList
-
-
     def simulate(self, svGenTyp):
         # np.random.seed(51)
         oriTe = meier(id=self.oriSeqName, seq=self.oriSeq, bornTime=0)
         self.meiPop.meiSet.add(oriTe)
         nowYear = self.yearStep
+        prevPopSize = self.meiPop.getPopSize()
         while not self.meiPop.reachMaxPopSize():
-            updatedTeList = []
-            updatedMeiPop = meiPopulation(maxPopSize=self.maxPopSize)
-            cpNumList = self.initCpNumList()
-            dirSvTypList = self.initDirSvTypList(cpNumList)
-            dirSvPosList = self.initDirSvPosList(cpNumList)
-            dirSvLenList = self.initDirSvLenList(cpNumList, svGenTyp)
+            while self.meiPop.getPopSize() == prevPopSize:
+                updatedTeList = []
+                updatedMeiPop = meiPopulation(maxPopSize=self.maxPopSize)
+                cpNumList = self.initCpNumList()
+                dirSvTypList = self.initDirSvTypList(cpNumList)
+                dirSvPosList = self.initDirSvPosList(cpNumList)
+                dirSvLenList = self.initDirSvLenList(cpNumList, svGenTyp)
 
-            pool = Pool(processes=self.cpuNum)
-            for te, cpNum, dirSvPoss, dirSvLens in zip(self.meiPop, cpNumList, dirSvPosList, dirSvLenList):
-                updatedTeList.append(pool.apply_async(self.oper.geneSvedSeq, (te, nowYear, cpNum, dirSvPoss, dirSvLens, svGenTyp)))
-            pool.close()
-            pool.join()
-
-            for teList in updatedTeList:
-                for te in teList.get():
-                    updatedMeiPop.addMei(te)
-            self.meiPop = updatedMeiPop
+                pool = Pool(processes=self.cpuNum)
+                for te, cpNum, dirSvPoss, dirSvLens in zip(self.meiPop, cpNumList, dirSvPosList, dirSvLenList):
+                    updatedTeList.append(pool.apply_async(self.oper.geneSvedSeq, (te, nowYear, cpNum, dirSvPoss, dirSvLens, svGenTyp)))
+                pool.close()
+                pool.join()
+                for teList in updatedTeList:
+                    for te in teList.get():
+                        updatedMeiPop.addMei(te)
+                self.meiPop = updatedMeiPop
+            prevPopSize = self.meiPop.getPopSize()
             print('PopSize:', self.meiPop.getPopSize())
             print('Mean Test Identity:', self.meiPop.getMeanIdentity(nowYear))
             nowYear += self.yearStep

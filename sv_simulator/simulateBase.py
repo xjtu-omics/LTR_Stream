@@ -20,7 +20,6 @@ from ttUtils import getOriId2tesorterClass
 from ttUtils import seqName2bainfo
 
 baseD = '/data/home/testXT/workData/simulateMeiSv'
-dataD = f'{baseD}/selectLTR_RT'
 
 
 def plotLenDensity(group, speId, lin):
@@ -53,9 +52,6 @@ def selectLTR_RT(configYaml):
     smlRange = paraDict['smlRange']
     midRange = paraDict['midRange']
     lrgRange = paraDict['lrgRange']
-
-    #ttt
-    print('test:', smlRange)
 
     os.system(f'''
         mkdir -p {workDir}
@@ -119,6 +115,7 @@ def generateSimulatedFasta(configYaml):
     with open(configYaml, 'r') as ym:
         paraDict = yaml.safe_load(ym)
 
+    workDir = paraDict['workDir']
     minSvLen = paraDict['minSvLen']
     maxSvLen = paraDict['maxSvLen']
     cpuNum = paraDict['cpuNum']
@@ -130,13 +127,13 @@ def generateSimulatedFasta(configYaml):
     cpP = 4e-6
     np.random.seed(randomSeed)
 
-    selectedFastaFile = f'{dataD}/selected.fasta'
-    consensusFastaFile = f'{dataD}/consensus.fasta'
+    selectedFastaFile = f'{workDir}/selected.fasta'
+    consensusFastaFile = f'{workDir}/consensus.fasta'
 
     consensusFa = pysam.FastaFile(consensusFastaFile)
     selectedFa = pysam.FastxFile(selectedFastaFile)
     consensusSeq = consensusFa.fetch('consensus')
-    with open('simulatedTe.fa', 'w') as of:
+    with open(f'{workDir}/simulatedTe.fa', 'w') as of:
         for i, read in enumerate(selectedFa):
             tarSeq = read.sequence.upper()
             oriSeq = consensusSeq.upper()
@@ -157,10 +154,3 @@ def generateSimulatedFasta(configYaml):
     consensusFa.close()
     selectedFa.close()
 
-# Select proper TE with significantly different length.
-# plotLenDensity()
-
-# Test Directed SV by Set a min rectifying gap size.
-# generateSimulatedFasta(int(sys.argv[1]))
-
-# generateSimulatedFasta(int(sys.argv[1]), int(sys.argv[2]), 'sub')
