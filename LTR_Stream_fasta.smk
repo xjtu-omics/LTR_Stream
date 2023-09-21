@@ -13,9 +13,6 @@ import ttlib
 paraDict = ttConfiger.getParaDict(config['ltrParaFile'])
 inputFasta = paraDict['ltrFasta']
 
-#ttt
-refFasta = '/data/home/testXT/testLTR_Stream/simulate2/workDir/ref.fa'
-
 baseD = paraDict['workDir']
 
 minOverLapForNovelModule = 0.8
@@ -217,7 +214,7 @@ rule getNovelFasta:
         tmpBedFile = f'{danteD}/tmp.bed'
         bainfoList2BedFile(toCalRestBain,tmpBedFile)
         shell('''
-            bedtools getfasta -fi {refFasta} -bed {tmpBedFile} -s >>{toCalRestFaFile}
+            bedtools getfasta -fi {inputFasta} -bed {tmpBedFile} -s >>{toCalRestFaFile}
             cat {tmpBedFile} >>{toCalRestBedFile}
             rm -rf {tmpBedFile}
             touch {output}

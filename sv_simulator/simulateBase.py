@@ -11,7 +11,10 @@ from Bio.Align import AlignInfo
 import pysam
 import numpy as np
 
+
+
 import sys
+import yaml
 import os
 from ttUtils import getOriId2tesorterClass
 from ttUtils import seqName2bainfo
@@ -20,40 +23,60 @@ baseD = '/data/home/testXT/workData/simulateMeiSv'
 dataD = f'{baseD}/selectLTR_RT'
 
 
-def plotLenDensity():
+def plotLenDensity(group, speId, lin):
     # Tekay of rice s001 was selected.
-    oriId2teClassTsv = '/data/home/testXT/testLTR_Stream/rice/workDir/tesorter/s001.tesorter.out.cls.tsv'
+    # group: rice
+    # speId: s001
+    oriId2teClassTsv = f'/data/home/testXT/testLTR_Stream/{group}/workDir/tesorter/{speId}.tesorter.out.cls.tsv'
+    # lin = 'Tekay'
     oriId2teClass = getOriId2tesorterClass(oriId2teClassTsv)
     lenList = []
     for oriId in oriId2teClass:
-        if oriId2teClass[oriId] == 'Tekay':
+        if oriId2teClass[oriId] == lin:
             bainfo = seqName2bainfo(oriId)
             lenList.append(bainfo.ed-bainfo.st)
-    sns.histplot(x=lenList, bins=20)
+    sns.histplot(x=lenList, bins=40)
     plt.xlabel('LTR-RT Length', fontsize=16)
     plt.ylabel('Count', fontsize=16)
     plt.tick_params(axis='both', labelsize=12)
     # plt.show()
-    plt.savefig(f'{baseD}/dist_tekay_length.pdf')
+    plt.savefig(f'{baseD}/{group}_{speId}_{lin}_lengthDist.pdf')
     plt.close()
 
-def selectLTR_RT():
-    oriId2teClassTsv = '/data/home/testXT/testLTR_Stream/rice/workDir/tesorter/s001.tesorter.out.cls.tsv'
+def selectLTR_RT(configYaml):
+    with open(configYaml, 'r') as ym:
+        paraDict = yaml.safe_load(ym)
+    group = paraDict['group']
+    speId = paraDict['speId']
+    lin = paraDict['lin']
+    workDir = paraDict['workDir']
+    smlRange = paraDict['smlRange']
+    midRange = paraDict['midRange']
+    lrgRange = paraDict['lrgRange']
+
+    #ttt
+    print('test:', smlRange)
+
+    os.system(f'''
+        mkdir -p {workDir}
+    ''')
+
+    oriId2teClassTsv = f'/data/home/testXT/testLTR_Stream/{group}/workDir/tesorter/{speId}.tesorter.out.cls.tsv'
     oriId2teClass = getOriId2tesorterClass(oriId2teClassTsv)
-    refFaFile = '/data/home/testXT/testLTR_Stream/rice/workDir/ref/s001.ref.fa'
-    selectedFastaFile = f'{dataD}/selected.fasta'
-    alignedFastaFile = f'{dataD}/aligned.fasta'
-    consensusFastaFile = f'{dataD}/consensus.fasta'
+    refFaFile = f'/data/home/testXT/testLTR_Stream/{group}/workDir/ref/{speId}.ref.fa'
+    selectedFastaFile = f'{workDir}/selected.fasta'
+    alignedFastaFile = f'{workDir}/aligned.fasta'
+    consensusFastaFile = f'{workDir}/consensus.fasta'
     refFa = pysam.FastaFile(refFaFile)
 
-    """
+    # """
     # Generate aligned fasta
-    tarLenDict = dict(_8k=(8000, 9000),
-                      _12k=(11800, 12200),
-                      _15k=(14500, 15500))
+    tarLenDict = dict(sml=(smlRange[0], smlRange[1]),
+                      mid=(midRange[0], midRange[1]),
+                      lrg=(lrgRange[0], lrgRange[1]))
     tar2oriId = dict()
     for oriId in oriId2teClass:
-        if oriId2teClass[oriId] == 'Tekay':
+        if oriId2teClass[oriId] == lin:
             bainfo = seqName2bainfo(oriId)
             for k in tarLenDict:
                 if (tarLenDict[k][0] <= bainfo.ed-bainfo.st <= tarLenDict[k][1]) \
@@ -69,9 +92,6 @@ def selectLTR_RT():
         tar2seq[k] = seq
     refFa.close()
 
-    os.system(f'''
-        mkdir -p {dataD}
-    ''')
     with open(selectedFastaFile, 'w') as of:
         for k in tar2seq:
             print(f'>{k}', file=of)
@@ -81,7 +101,7 @@ def selectLTR_RT():
         PATH=/data/home/testXT/miniconda3/envs/ltrStream/bin:$PATH
         muscle -align {selectedFastaFile} -output {alignedFastaFile}
     ''')
-    """
+    # """
 
     alignment = AlignIO.read(alignedFastaFile, 'fasta')
     summary_align = AlignInfo.SummaryInfo(alignment)
@@ -92,18 +112,23 @@ def selectLTR_RT():
         print('>consensus', file=of)
         print(consensusSeq, file=of)
 
-def generateSimulatedFasta(minSvLen, maxSvLen=None, svGenTyp=None):
+def generateSimulatedFasta(configYaml):
     from svSimulator import svSimulator
-
+    svGenTyp = 'sub'
     # selectLTR_RT()
+    with open(configYaml, 'r') as ym:
+        paraDict = yaml.safe_load(ym)
 
-    cpuNum=200
+    minSvLen = paraDict['minSvLen']
+    maxSvLen = paraDict['maxSvLen']
+    cpuNum = paraDict['cpuNum']
+    randomSeed = paraDict['randomSeed']
+
     maxPopSize=1000
     ranSvP = 1e-9
     yearStep = 3e5
     cpP = 4e-6
-    np.random.seed(52)
-
+    np.random.seed(randomSeed)
 
     selectedFastaFile = f'{dataD}/selected.fasta'
     consensusFastaFile = f'{dataD}/consensus.fasta'
@@ -132,12 +157,10 @@ def generateSimulatedFasta(minSvLen, maxSvLen=None, svGenTyp=None):
     consensusFa.close()
     selectedFa.close()
 
-
-
 # Select proper TE with significantly different length.
 # plotLenDensity()
 
 # Test Directed SV by Set a min rectifying gap size.
 # generateSimulatedFasta(int(sys.argv[1]))
 
-generateSimulatedFasta(int(sys.argv[1]), int(sys.argv[2]), 'sub')
+# generateSimulatedFasta(int(sys.argv[1]), int(sys.argv[2]), 'sub')
