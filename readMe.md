@@ -13,7 +13,7 @@ each LTR-RT a cluster label and automatically evaluates reliability of each clus
 
 ## Sub-lineage Clustering of Retand LTR-RTs from Three Papaver Species
 <div align=center>
-    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/main/.readMe_images/Papaver_Retand_all_cut.gif" width="700px" height="592px" /> 
+    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/main/.readMe_images/Papaver_Retand_all_cut.gif" width="700px" height="377px" /> 
 </div>
 
 ## Installation
