@@ -1,9 +1,9 @@
 # LTR_Stream
-LTR_Stream was designed for reconstructing evolutionary trajectories for LTR-RTs
-in closely related species and identifying genome (or sub-genome) specific genetic
-LTR-RT markers for genomic comparison and phylogeny inferring. Built upon Snakemake,
-LTR_Stream is an user-friendly and integral pipeline handling procedures from genome
-downloading to genetic marker detection. 
+LTR_Stream is designed to achieve sub-lineage level LTR-RT clustering in closely related species, 
+discovering valuable genetic markers for genome comparison and LTR-RT modular evolution in host genome.
+It takes nucleotide sequences of intact LTR-RTs belonging to the same LTR-lineage as input. A mix 
+of LTR-RTs from different LTR-lineages is theoretically acceptable but not recommended. LTR_Stream gives
+each LTR-RT a cluster label and automatically evaluate reliability of each cluster.
 
 ## Graphical Abstract
 
