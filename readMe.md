@@ -3,12 +3,12 @@ LTR_Stream is designed to achieve sub-lineage level LTR-RT clustering in closely
 discovering valuable genetic markers for genome comparison and LTR-RT modular evolution in host genome.
 It takes nucleotide sequences of intact LTR-RTs belonging to the same LTR-lineage as input. A mix 
 of LTR-RTs from different LTR-lineages is theoretically acceptable but not recommended. LTR_Stream gives
-each LTR-RT a cluster label and automatically evaluate reliability of each cluster.
+each LTR-RT a cluster label and automatically evaluates reliability of each cluster.
 
 ## Graphical Abstract
 
 <div align=center>
-    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/main/.readMe_images/f3d321d7.png" width="500px" height="400px" />
+    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/main/.readMe_images/GraphAbstract.png" width="500px" height="400px" />
 </div>
 
 ## Genome Specific Markers for Four Gossypium Species
