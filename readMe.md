@@ -11,9 +11,9 @@ each LTR-RT a cluster label and automatically evaluates reliability of each clus
     <img src="https://github.com/xjtu-omics/LTR_Stream/blob/main/.readMe_images/GraphAbstract.png" width="700px" height="443px" />
 </div>
 
-## Genome Specific Markers for Four Gossypium Species
+## Sub-lineage Clustering of Retand LTR-RTs from Three Papaver Species
 <div align=center>
-    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/main/.readMe_images/cotton_geneticMarker.gif" width="435px" height="300px" /> <img src="https://github.com/xjtu-omics/LTR_Stream/blob/main/.readMe_images/geneticMarker.png" width="300px" height="300px"/>
+    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/main/.readMe_images/Papaver_Retand_all.gif" width="435px" height="300px" /> 
 </div>
 
 ## Installation
