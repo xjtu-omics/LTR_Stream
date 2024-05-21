@@ -28,7 +28,7 @@ Please configure the ssh key of git and make sure `git clone` could work.
 #### 1.Clone LTR_Stream from github.
 ```shell
 ltrStreamInstallPath=path_you_want_to_install_LTR_Stream
-cd ${ltrStreamInstallPath} && git clone xxx
+cd ${ltrStreamInstallPath} && git clone git@github.com:xjtu-omics/LTR_Stream.git
 ```
 #### 2.Run install script.
 If mamba is not available, please run:
@@ -41,26 +41,22 @@ cd ${ltrStreamInstallPath}/LTR_Stream && bash install_LTR_Stream.sh mamba
 ```
 
 ## Quick start
-#### 1. LTR-RT evolutionary trajectories reconstruction and classification
+#### Sub-lineage level LTR-RT clustering
 ```shell
 conda activate ltrStream
-cd ${ltrStreamInstallPath}/LTR_Stream
+cd ${ltrStreamInstallPath}/LTR_Stream/src
 snakemake -s LTR_Stream.smk -f stream --config ltrParaFile=path_of_ltrPara.tsv -j {threadsNumber}
 ```
-#### 2. Genetic maker detection
-```shell
-conda activate ltrStream
-cd ${ltrStreamInstallPath}/LTR_Stream
-snakemake -s LTR_Stream.smk -f geneticMarkerDetect --config ltrParaFile=path_of_ltrPara.tsv -j {threadsNumber}
-```
 
-### Config files
-#### 1.`ltrPara.tsv`
-Two config files should be prepared for running LTR_Stream.  
-The first file is called `ltrPara.tsv`(Of course you can 
-rename the name of the file, we use `ltrPara.tsv` here to 
-refer to this config file). The second file is called `ref.tsv`. \
-For `ltrPara.tsv`, two mandatory parameters are needed:
+### Config files `ltrPara.tsv`
+LTR_Stream will automatically run according to parameters set in this TSV 
+(Tab-Separated Values) file, so please make sure all the parameters were set here before 
+you start LTR_Stream.smk. (You can modify the file name and path according to your preferences. 
+In this documentation, we refer to this configuration parameters file as ltrPara.tsv.)
+The following is an example of the file. Lines beginning with a hash symbol (#) represent 
+comments. Values of optional parameter in this example represent their default values in LTR_Stream. To facilitate 
+parameter debugging, the parameters that significantly impact the clustering results will be introduced first.
+
 ```tsv
 # An example for ltrPara.tsv
 # All tab seperated.
@@ -68,10 +64,7 @@ For `ltrPara.tsv`, two mandatory parameters are needed:
 # Mandatory parameters
 # workDir: A blank directory for running LTR_Stream
 # The outputs of LTR_Stream are in workDir/figure
-workDir /data/home/xutun/mei/rice/workDir
-# refConfig: Path of the second config file where setting the information of genome assemblies.
-refConfig /data/home/xutun/project/LTR_Stream/config/ref.tsv
-
+workDir /xx/xx/xx
 
 
 # Optional parameters
@@ -124,24 +117,7 @@ epgLambda 0.2
 epgMu 0.02
 epgAlpha 0.002
 ```
-#### 2.`ref.tsv` is a tsv file recording the information of genome assemblies.
-```tsv
-# An example for ref.tsv
-speId speName chrNum miu source
-s001 Oryza sativa_indica 12 1.3e-8  https://ftp.ncbi.nlm.nih.gov/genomes/genbank/plant/Oryza_sativa/all_assembly_versions/GCA_001889745.1_Rice_IR8_v1.7/GCA_001889745.1_Rice_IR8_v1.7_genomic.fna.gz
-s002 Oryza alta 24 1.3e-8 /data/home/xutun/mei/rice/resources/originRef/GWHAZTO00000000.genome.fasta.gz
-s003 Oryza punctata 12 1.3e-8 https://ftp.ncbi.nlm.nih.gov/genomes/genbank/plant/Oryza_punctata/latest_assembly_versions/GCA_000573905.2_OpunRS2/GCA_000573905.2_OpunRS2_genomic.fna.gz
-s004 Oryza brachyantha 12 1.3e-8 https://ftp.ncbi.nlm.nih.gov/genomes/genbank/plant/Oryza_brachyantha/latest_assembly_versions/GCA_000231095.3_ObraRS2/GCA_000231095.3_ObraRS2_genomic.fna.gz
-# speId: An ID for species, should be started with an English letter, where only English
-# letters and numbers are permitted.
-# speName: The Latin name of the species.
-# chrNum: Number of chromosomes used in the analysis, LTR_Stream automatically extracts 
-# the first chrNum sequences in the fasta file.
-# miu: Neutral mutation rate that used to estimate the insertion time of LTR-RTs.
-# source: The source of genome assemblies. It can be a download link or a path for local
-# fasta file.
-# Can be fasta format or a compressed format (.gz).
-```
+
 ### Usage
 
 ### Outputs
