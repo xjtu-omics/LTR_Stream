@@ -48,7 +48,7 @@ cd ${ltrStreamInstallPath}/LTR_Stream/src
 snakemake -s LTR_Stream.smk -f stream --config ltrParaFile=path_of_ltrPara.tsv -j {threadsNumber}
 ```
 
-### Config files `ltrPara.tsv`
+### Config file `ltrPara.tsv`
 LTR_Stream will automatically run according to parameters set in this TSV 
 (Tab-Separated Values) file, so please make sure all the parameters were set here before 
 you start LTR_Stream.smk. (You can modify the file name and path according to your preferences. 
@@ -66,26 +66,52 @@ parameter debugging, the parameters that significantly impact the clustering res
 # The outputs of LTR_Stream are in workDir/figure
 workDir /xx/xx/xx
 
+# ltrFasta: The nucleotide sequences of the LTR-RT set you want to analyze. Please ensure it is in standard FASTA format. Names of these sequences should follow the format like 'chrxx:stPos-endPos(strand)'. It is recommended to use bedtools to extract sequences from the genome.
+ltrFasta    /xx/xx/xx.fa
+
 
 # Optional parameters
-# transAllContigs: LTR_Stream usually extracts main chromosomes for LTR-RT  
-# identification. If you wish to include those LTR-RTs from contigs, please
-# set transAllContigs to True. Default is False.
-transAllContigs False
 
-
-# minOverLapForNovelModule: Control the dispersion of CEPs in the 3-D space.
-# It is used in disjoint-set data structure to judge if there should be an
-# edge between two alignment regions. It could be set at the range from 0 to 1. 
-# Greater minOverLapForNovelModule leads to more dispersed result. Default is 0.8.
+# Important parameters
+# minOverLapForNovelModule: Control the number and dispersion of module sequences in the 3-D space.
+# It is used in disjoint-set data structure to judge if there should be an edge between two alignment
+# regions. It could be set at the range from 0 to 1. Greater minOverLapForNovelModule leads to more
+# module sequences and more dispersed result. Default is 0.8.
 minOverLapForNovelModule 0.8
 
 
-# maxCNSPercentage: Control the dispersion of CEPs with minOverLapForNovelModule.
-# Greater maxCNSPercentage leads to more dispersed result. It should be set at 
-# a range from 0 to 1. maxCNSPercentage directly control the number of most frequent
-# novel modules used for reconstructing evolutionary trajectories. Default is 0.7.
-maxCNSPercentage 0.7
+# topModNum: Control the number and dispersion of module sequences with minOverLapForNovelModule.
+# Greater topModNum leads to more module sequences and more dispersed result. LTR_Stream will output 
+# a module number versus covered LTR-RTs (named coverLine.pdf under workDir/figure). The topModNum 
+# needs to be set large enough to ensure that about 80% of LTR-RTs have 2-3 modules. It is estimated 
+# topModNum should be at range 200-800. Larger minOverLapForNovelModule usually corresponds to larger 
+# topModNum. You can adjust the two parameters in coordination. Default is 250.
+topModNum   250
+
+
+# tsneEarlyExaggeration: A crucial parameter in t-SNE dimensionality reduction, directly affects the
+# results. An excessively large tsneEarlyExaggeration will result in a linear shape in the 
+# three-dimensional space, while an excessively small tsneEarlyExaggeration will lead to a dispersed 
+# distribution, hindering sub-lineage identification. It is estimated that tsneEarlyExaggeration 
+# should be at range 6-9. Default is 6.
+tsneEarlyExaggeration   6
+
+
+# tsnePerplexity: Larger tsnePerplexity will provide more robust results, while a smaller 
+# tsnePerplexity will yield more detailed clustering results. Depending on the size of the dataset, 
+# it is not recommended to set tsnePerplexity to less than 3% of the module sequence count for larger 
+# datasets, or less than 15 for smaller datasets. Default is 100.
+tsnePerplexity  100
+
+
+# cluCentCut: A parameter used to assess the degree of intra-class distribution aggregation in 3D
+# space. A larger cluCentCut will result in coarser clustering. If LTR_Stream indicates clustering 
+# failure, please increase this parameter within the range of 0-1. Default is 0.1.
+cluCentCut  0.1
+
+
+
+
 
 
 # nClustersForInitTree : Control the initial tree for trajectory reconstruction.
