@@ -4875,7 +4875,7 @@ def plotZoomIn(adata, posDf, posDf_2d, prefix, treeAnnot):
     # posDf_2d should only contain columns 'x' and 'y' and corresponded index.
     # posDf_2d's cluId is updated by that of posDf
     from meiPlottter import p3DPlotter
-    from ltrShower import ltrShower
+    # from ltrShower import ltrShower
     import pandas as pd
 
     # Basic parameters are defined by adata
@@ -4895,11 +4895,10 @@ def plotZoomIn(adata, posDf, posDf_2d, prefix, treeAnnot):
         posDf_2d = pd.concat([posDf_2d,
                                    posDf['cluId']],
                                  axis=1)
+    '''
     ls = ltrShower(ltrParaFile)
-    # ls.plot2DWithInsTime(posDf=posDf_2d[['x', 'y']], outPrefix=prefix, title='')
     ls.plot2DWithCluId(posDf=posDf_2d, outPrefix=prefix)
-    # ls.plot2DWithSpe(posDf=posDf_2d[['x', 'y']], outPrefix=prefix)
-
+    '''
     outGifFileName = f'{prefix}.gif'
     _3dPlotter = p3DPlotter(initSource=None, initTyp=None, colorList=None, ltrParaFile=ltrParaFile)
     toPlotDf = posDf[['x', 'y', 'z']]

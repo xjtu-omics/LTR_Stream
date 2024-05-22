@@ -7,7 +7,6 @@ if '/data/home/testXT/LTR_Stream' in sys.path:
     sys.path.remove('/data/home/testXT/LTR_Stream')
 
 if config['LTR_Stream'] not in sys.path:
-    print('abccc')
     sys.path.append(config['LTR_Stream'])
 
 import ttConfiger
