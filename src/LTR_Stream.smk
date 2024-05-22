@@ -356,7 +356,7 @@ rule staNovelSelectedNumVsCovered:
         plotData.columns = ['x', 'y', 'lineColor']
         tmpPlotData = plotData[plotData['x'] < 1000]
         g = sns.lineplot(x='x',y='y',hue='lineColor',data=tmpPlotData)
-        g._legend.set_title('Module Number')
+        g.legend(title='Module Number')
         plt.savefig(f'{figureD}/coverLine.pdf',bbox_inches='tight')
         plt.close()
         # For cases that use Fasta as input, LTR region can be a common CNS (covers nearly all TEs) which makes this parameter does not work.
