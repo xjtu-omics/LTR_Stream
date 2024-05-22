@@ -1,0 +1,13 @@
+workDir	/xx/xx/xx
+ltrFasta	/xx/xx/xx.fa
+minOverLapForNovelModule	0.8
+topModNum	250
+tsneEarlyExaggeration	6
+tsnePerplexity	100
+cluCentCut	0.1
+maxZoomInLevel	-1
+tsneLearningRate	6
+blastEvalue	1e-10
+epgLambda	0.01
+epgMu	0.01
+epgAlpha	0.05

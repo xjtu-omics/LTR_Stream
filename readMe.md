@@ -41,7 +41,7 @@ cd ${ltrStreamInstallPath}/LTR_Stream && bash install_LTR_Stream.sh mamba
 ```
 
 ## Quick start
-#### Sub-lineage level LTR-RT clustering
+### Sub-lineage level LTR-RT clustering
 ```shell
 conda activate ltrStream
 cd ${ltrStreamInstallPath}/LTR_Stream/src
@@ -53,9 +53,8 @@ LTR_Stream will automatically run according to parameters set in this TSV
 (Tab-Separated Values) file, so please make sure all the parameters were set here before 
 you start LTR_Stream.smk. (You can modify the file name and path according to your preferences. 
 In this documentation, we refer to this configuration parameters file as ltrPara.tsv.)
-The following is an example of the file. Lines beginning with a hash symbol (#) represent 
-comments. Values of optional parameter in this example represent their default values in LTR_Stream. To facilitate 
-parameter debugging, the parameters that significantly impact the clustering results will be introduced first.
+The following is an example of the file. Lines beginning with a # represent comments. Values of optional parameter in this example represent their default values in LTR_Stream. To facilitate 
+parameter debugging, the parameters that significantly impact the clustering results will be introduced first. A standard example of this file is under examples/.
 
 ```tsv
 # An example for ltrPara.tsv
