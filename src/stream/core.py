@@ -4697,7 +4697,7 @@ def plotCluster3D(adata, labelList, toPlotPosDf=None, outGifFileName = 'cluster3
     import numpy as np
     from ttStream import loadWorkData
     import ttUtils
-    ltrParaFile = f'{adata.uns["workdir"]}/../../../config/ltrPara.tab'
+    ltrParaFile = adata.uns["ltrParaFile"]
     figureD = f'{adata.uns["workdir"]}/../../figure'
     typList = []
     for l in labelList:
@@ -4879,7 +4879,7 @@ def plotZoomIn(adata, posDf, posDf_2d, prefix, treeAnnot):
     import pandas as pd
 
     # Basic parameters are defined by adata
-    ltrParaFile = f'{adata.uns["workdir"]}/../../../config/ltrPara.tab'
+    ltrParaFile = adata.uns["ltrParaFile"]
     figureD = f'{adata.uns["workdir"]}/../../figure'
 
     if posDf is None:
@@ -5065,11 +5065,11 @@ def zoomIn(adata, oriDisMat, tarIndList, tsneLearningRate, tsnePerplexity, tsneE
             validP = calValidP(validCluIdSet, posDf)
             tsneEarlyExaggeration += 0.5
         if validP < validPCutOff:
-            return infoIntegrator.init_Null(f'{adata.uns["workdir"]}/../../../config/ltrPara.tab')
+            return infoIntegrator.init_Null(adata.uns["ltrParaFile"])
     upperCase = 'A'
     cluId2pltId = {}
     notZoomInPltIdSet = set()
-    inte = infoIntegrator.init_Null(f'{adata.uns["workdir"]}/../../../config/ltrPara.tab')
+    inte = infoIntegrator.init_Null(adata.uns["ltrParaFile"])
     for cluId in sorted(list(validCluIdSet)):
         upperCase = chr(ord(upperCase) + 1)
         cluId2pltId[cluId] = ord(upperCase) - ord('A')
@@ -5108,7 +5108,7 @@ def zoomIn(adata, oriDisMat, tarIndList, tsneLearningRate, tsnePerplexity, tsneE
         else:
             notZoomInPltIdSet.add(cluId)
         cluId2isTer[cluId] = isTer
-    myInte = infoIntegrator.init_from_posDf(posDf, posDf_2d, prefix, f'{adata.uns["workdir"]}/../../../config/ltrPara.tab', cluId2isTer)
+    myInte = infoIntegrator.init_from_posDf(posDf, posDf_2d, prefix, adata.uns["ltrParaFile"], cluId2isTer)
     return infoIntegrator.merge(inte, myInte)
 def isComplexScenario(posDf, adata):
     # posDf can be a np.array, with each position of point each row

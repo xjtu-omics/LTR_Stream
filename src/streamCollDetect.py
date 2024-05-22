@@ -67,6 +67,7 @@ for myD in envDirs:
 st.set_figure_params(dpi=80,style='white',figsize=[5.4,4.8],
                      rc={'image.cmap': 'viridis'})
 adata=st.read(file_name=f'toCalRest.distanceMat.csv', file_path=danteD, workdir=streamD, delimiter=',')
+adata.uns['ltrParaFile'] = ltrParaFile
 oriDisMat = np.array(pd.read_csv(f'{danteD}/toCalRest.distanceMat.csv', header=None))
 
 st.add_cell_labels(adata,file_name=labelFile)
