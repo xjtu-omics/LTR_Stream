@@ -66,7 +66,10 @@ parameter debugging, the parameters that significantly impact the clustering res
 # The outputs of LTR_Stream are in workDir/figure
 workDir /xx/xx/xx
 
-# ltrFasta: The nucleotide sequences of the LTR-RT set you want to analyze. Please ensure it is in standard FASTA format. Names of these sequences should follow the format like 'chrxx:stPos-endPos(strand)'. It is recommended to use bedtools to extract sequences from the genome.
+# ltrFasta: The nucleotide sequences of the LTR-RT set you want to 
+# analyze. Please ensure it is in standard FASTA format. Names of these
+# sequences should follow the format like 'chrxx:stPos-endPos(strand)'. It 
+# is recommended to use bedtools to extract sequences from the genome.
 ltrFasta    /xx/xx/xx.fa
 
 
@@ -110,108 +113,44 @@ tsnePerplexity  100
 cluCentCut  0.1
 
 
+# maxZoomInLevel: LTR_Stream achieves fine clustering of LTR-RT in complex scenarios through 
+# iterative expansion. This parameter controls the maximum depth of iterative expansion. If you find
+# that the number of clusters is too large or some categories within subviews are verified as 
+# unreliable, you can set a maximum limit. The default value is -1, which means no limit is set. 
+maxZoomInLevel  -1
 
 
+# Other parameters
+
+# tsneLearningRate: For t-SNE dimensionality reduction, LTR_Stream requires a very small learning rate, with a default value of 6. It is not recommended to set this value higher than 8.
+tsneLearningRate    6
 
 
-# nClustersForInitTree : Control the initial tree for trajectory reconstruction.
-# Greater nClustersForInitTree would generate a initial tree with more nodes, 
-# leading to a tree with more details but also more noises. Default is 50.
-nClustersForInitTree 50
+# blastEvalue: Used for homology searching in BLASTn. Default is 1e-10. If the LTR-RT sequence set to 
+# be analyzed has particularly high similarity, you can reduce this parameter accordingly.
+blastEvalue 1e-10
 
-
-# minNumInClusterForInitTree: When initializing a tree before performing ElPiGraph,
-# clusters with less CEPs are usually widely dispersed and mislead the tree.
-# This parameter is used for filter these clusters. Greater minNumInClusterForInitTree
-# would filter more noises and also may ignore some details. Default is 10.
-minNumInClusterForInitTree 10
-
-
-# kForGeneticMarker: Used for identifying genetic markers, greater k may helpful for
-# identifying more specific markers, but also brings instability for those branches 
-# with fewer LTR-RTs. Default is 2.
-kForGeneticMarker 2
-
-
-# onlyDetectFinalBranch: Used for identifying genetic markers. If few markers were
-# identified, please set it to False to identify more potential markers. Default is
-# True.
-onlyDetectFinalBranch True
 
 # Parameters used in ElPiGraph
-epgLambda 0.2
-epgMu 0.02
-epgAlpha 0.002
+epgLambda   0.01
+epgMu   0.01
+epgAlpha 0.05
 ```
-
-### Usage
 
 ### Outputs
-#### workDir/figure/finalResult.gif
-The 3-D reconstructed trajectories of LTR-RTs.
-Each dot represent a pattern sequence that extracted from one or severl
-LTR-RTs. The color of the dot represents the lineage type which annotated
-at the right side. The black lines represent the reconstructed trajectories.
-<div align=center>
-    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/main/.readMe_images/e4d6ec59.png" width="300px" height="285px" />
-</div>
+All outputs will be saved in workDir/figure
+#### workDir/figure/\*\*.gif
+GIF files showing clustering results in each 3D-subview.
 
-#### workDir/figure/finalInfo.tab
-Tab seperated file containing the details of `finalResult.gif`, including
-Name of LTR-RT, position in `finalResult.gif`, ID of branch, lineage from
-TESorter and insertion time from LTR_Retriever.
-<div align=center>
-    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/main/.readMe_images/1a11f7df.png" width="460px" height="80px" />
-</div>
+#### workDir/figure/clusterRel.tsv
+TSV file recording final cluster results.
 
-#### workDir/figure/tesorter.sta.csv
-Number of LTR-RTs of each lineage in each species.
-<div align=center>
-    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/main/.readMe_images/c3602f28.png" width="500px" height="224px" />
-</div>
+#### workDir/figure/classInfo.tsv
+TSV file recording details of clustering including coordinate information in each subview.
 
-#### workDir/geneticMarkers
-##### kmeans_{k}.circos.png
-Genomic distribution of identified genetic markers.
-<div align=center>
-    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/main/.readMe_images/geneticMarker.png" width="400px" height="400px" />
-</div>
+#### workDir/figure/clusterNuclVali.tsv
+TSV file recording foldchange of inter- and intra-distance and corresponding significance for each cluster. Foldchange that signifcantly greater than one means reliable cluster.
 
-##### kmeans_{k}.3D.gif
-Identified genetic markers on the reconstructed evolutionary trajectories.
-<div align=center>
-    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/main/.readMe_images/035d4f7e.png" width="300px" height="290px" />
-</div>
+#### workDir/figure/coverLine.pdf
+Line plot showing module number and corresponding covered LTR-RT percentage. Used for guiding parameter ajustment.
 
-##### kmeans_{k}.summary.tsv
-Summary of the identified genetic markers.
-<div align=center>
-    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/main/.readMe_images/5cb3625d.png" width="190px" height="74px" />
-</div>
-
-##### kmeans_{k}.oriId.tsv
-LTR-RT level genetic marker annotation.  
-<div align=center>
-    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/main/.readMe_images/573a345a.png" width="184px" height="112px" />
-</div>
-
-##### kmeans_{k}.enrichRegion.bed
-Bed formatted file that annotates genomic regions with enriched genetic markers.
-<!--
-#### 2. Distribution of subtypes LTR-RT among genome.
-```shell
-conda activate ltrStream
-cd path_you_want_to_install_LTR_Stream/LTR_Stream
-python circosPlot.py -f path_of_ltrPara.Tab -b S1_S2,k2 -b S3_S4,l2 -c S1,k2 -c S2,l2 -o {outputPrefix}
-# '-b' means plot the positions of LTR-RTs that on one specific branch.
-# In case that the branch is too long, we provide an optional parameter
-# 'k' to divided LTR-RTs on this branch into k clusters (using k-means).
-# '-c' means plot the positions of LTR-RTs that on branches that related
-# to one specific node (if the node is a leaf node, then it is equivalent
-# to to set this branch in -b). You can also use 'k' parameters to divide
-# the LTR-RTs into k clusters.
-# Except for the 'k' parameter, we also provide another optional parameter
-# 'l'. It helps to filter out LTR-RTs with simple pattern sequences that
-# unlike to be genome- or subgenome-specific molecular markers.
-```
--->
