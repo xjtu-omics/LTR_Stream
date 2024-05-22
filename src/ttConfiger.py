@@ -23,15 +23,15 @@ class ttConfiger:
         try:
             self.epgLambda = float(tmpParaDict['epgLambda'])
         except:
-            self.epgLambda = 0.002
+            self.epgLambda = 0.01
         try:
             self.epgAlpha = float(tmpParaDict['epgAlpha'])
         except:
-            self.epgAlpha = 0.2
+            self.epgAlpha = 0.05
         try:
             self.epgMu = float(tmpParaDict['epgMu'])
         except:
-            self.epgMu = 0.02
+            self.epgMu = 0.01
         try:
             self.blastEvalue = tmpParaDict['blastEvalue']
         except:
