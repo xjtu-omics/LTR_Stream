@@ -5000,6 +5000,7 @@ def reclusterWithTraj(prefix, adata, posDf, posDf_2d, epgLambda, epgAlpha, epgMu
     subAdata.uns['prefix'] = prefix
     subAdata.uns['oToPltPointPosDf'] = posDf[posDf.cluId==0]
     subAdata.uns['posDf_2d'] = posDf_2d
+    subAdata.uns['ltrParaFile'] = adata.uns['ltrParaFile']
     branchNodeNum = 4
     ltr_seed_elastic_principal_graph(subAdata)
     elastic_principal_graph(subAdata, epg_lambda=epgLambda, epg_alpha=epgAlpha, epg_mu=epgMu,
