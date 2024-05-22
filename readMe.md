@@ -33,11 +33,11 @@ cd ${ltrStreamInstallPath} && git clone git@github.com:xjtu-omics/LTR_Stream.git
 #### 2.Run install script.
 If mamba is not available, please run:
 ```shell
-cd ${ltrStreamInstallPath}/LTR_Stream && bash install_LTR_Stream.sh
+cd ${ltrStreamInstallPath}/LTR_Stream && bash Init_LTR_Stream_Env.sh
 ```
 For a speeding up installation with mamba, please run:
 ```shell
-cd ${ltrStreamInstallPath}/LTR_Stream && bash install_LTR_Stream.sh mamba
+cd ${ltrStreamInstallPath}/LTR_Stream && bash Init_LTR_Stream_Env.sh mamba
 ```
 
 ## Quick start
