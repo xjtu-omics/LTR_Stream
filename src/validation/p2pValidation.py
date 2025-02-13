@@ -28,7 +28,6 @@ class p2pValidator:
         # gapless_sl = sum([1 for i in range(sl) if (sa[i] != '-' and sb[i] != '-')])
         # gap_id = (100 * sum(matches)) / gapless_sl
         return seq_id
-
     def getAll2allIdentity(self, typ=None):
 
         def runBioPairAln(paraDict):

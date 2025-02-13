@@ -7,7 +7,6 @@ from fileSysSupplier import fileSysSupplier
 
 
 
-
 # Do not change infoIntegrator.infoDf by operator =,
 # only use setInfoDf() to change its value.
 # Or, there will be problems with filter
@@ -106,9 +105,9 @@ class infoIntegrator:
         infoDf = cls.reformatInfoDf(infoDf)
         return infoIntegrator(infoDf, fss)
     @classmethod
-    def init_fromTsv(cls, tsvFile):
+    def init_fromTsv(cls, tsvFile, fss=None):
         infoDf = pd.read_csv(tsvFile, sep='\t')
-        return infoIntegrator(infoDf, None)
+        return infoIntegrator(infoDf, fss)
     @classmethod
     def expandInfoDfOriId(cls, infoDf, fss):
         modId2oriIdSet = ttUtils.getModId2OriIdSet(fss.oriId2modSeqTabFile, fss.modSeq2modIdTabFile)
@@ -186,6 +185,7 @@ class infoIntegrator:
             classDf = self.filterDf(Classes, zoomInLevel)
         else:
             classDf = self.infoDf[self.infoDf.isTerminalCluster==True]
+        classDf['Class'] = classDf['finalClass']
         nuclDf = classDf.groupby('Class').apply(
             lambda x: x.sample(n=min(num, x.shape[0]), replace=False, random_state=self.randomState))
         nuclDf = nuclDf.reset_index(drop=True)
@@ -282,6 +282,113 @@ class infoIntegrator:
         for ind, row in tmpDf.iterrows():
             relDict[row.Class] = row.finalClass
         return relDict
+    def addPosInfo(self):
+        from ttUtils import seqName2bainfo
+        self.infoDf['chr'] = self.infoDf.oriId.apply(
+            lambda x:seqName2bainfo(x).chr
+        )
+        self.infoDf['st'] = self.infoDf.oriId.apply(
+            lambda x:seqName2bainfo(x).st
+        )
+        self.infoDf['ed'] = self.infoDf.oriId.apply(
+            lambda x:seqName2bainfo(x).ed
+        )
+        self.setInfoDf()
+    def getClass2finalClass(self):
+        class2finalClass = {}
+        for ind, row in self.infoDf.iterrows():
+            class2finalClass[row.Class] = row.finalClass
+        return class2finalClass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

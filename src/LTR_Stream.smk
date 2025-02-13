@@ -355,8 +355,11 @@ rule staNovelSelectedNumVsCovered:
                           axis=1)
         plotData.columns = ['x', 'y', 'lineColor']
         tmpPlotData = plotData[plotData['x'] < 1000]
+        tmpPlotData.y = tmpPlotData.y*100
         g = sns.lineplot(x='x',y='y',hue='lineColor',data=tmpPlotData)
-        g.legend(title='Module Number')
+        g.set_xlabel('Module Number', fontdict={'fontsize': 16})
+        g.set_ylabel('Covered LTR-RT Percentage', fontdict={'fontsize': 16})
+        plt.tick_params(axis='both', labelsize=16)
         plt.savefig(f'{figureD}/coverLine.pdf',bbox_inches='tight')
         plt.close()
         # For cases that use Fasta as input, LTR region can be a common CNS (covers nearly all TEs) which makes this parameter does not work.
@@ -489,7 +492,7 @@ rule pcoaPlot:
         from sklearn.manifold import TSNE
         import pandas as pd
         import matplotlib as mpl
-        from ttlib import plotRotate3DScatter
+        from ttlib import plotRotate3DScatter, plotDisVsModNum
         mpl.use('agg')
         mpl.rcParams['pdf.fonttype'] = 42
         from ttUtils import getModId2modNum
@@ -506,56 +509,38 @@ rule pcoaPlot:
         pcoaRel = tsne.fit_transform(disData)
         pcoaData = pd.DataFrame(pcoaRel)
 
-        # For mds
-        # mds = MDS(n_components=3, dissimilarity='precomputed', n_jobs=48, max_iter=30)
-        # mdsRel = mds.fit_transform(disData)
-        # pcoaData = pd.DataFrame(mdsRel)
-
-        # For isomap
-        # isomap = Isomap(n_neighbors=10, n_components=3, metric='precomputed', n_jobs=48)
-        # isomapRel = isomap.fit_transform(disData)
-        # pcoaData = pd.DataFrame(isomapRel)
-
-        # For tsne on real data
-
-        # isomap = Isomap(n_neighbors=10, n_components=30, metric='precomputed', n_jobs=48)
-        # isomapRel = isomap.fit_transform(disData)
-
-        # pcoaRel = pcoa(disData)
-        # pcoaData = pcoaRel.samples.iloc[:, 0:100]
-        # tsne = TSNE(n_components=3,learning_rate=6,n_iter=250,init='random', perplexity=200, random_state=1)
-        # tsneRel = tsne.fit_transform(pcoaData)
-        # pcoaData = pd.DataFrame(tsneRel)
-
         pcoaData.to_csv(f'{danteD}/toCalRest.pcoaDis.csv',header=None,index=None)
         plotRotate3DScatter(pcoaData,f'{figureD}/pcoaDistance.3d.gif')
-        pcoaData = pcoaData.iloc[:,0:3]
-        pcoaData.columns = ['x','y','z']
-        print(type(pcoaData.iloc[0,0]))
-        print(pcoaData.head())
-        #twoDimensionData.plot()
-        modId2modNum = getModId2modNum(f'{danteD}/toCalRest.modSeq2num.tab',f'{danteD}/toCalRest.modSeq2modId.tab')
-        modIdList = []
-        modNumList = []
-        for modId in modId2modNum:
-            modIdList.append(modId)
-            modNumList.append(modId2modNum[modId])
-        sizeData = pd.concat([pd.Series(modIdList),
-                              pd.Series(modNumList)],
-                             axis=1)
-        sizeData.columns = ['id','num']
-        sizeData.sort_values(by='id',inplace=True)
-        print(pcoaData['x'].head())
-        pcoaData.reset_index(drop=True,inplace=True)
-        sizeData.reset_index(drop=True,inplace=True)
-        twoDimensionData = pd.concat([pcoaData['x'],
-                                      pcoaData['y'],
-                                      sizeData['num']],
-                                      axis = 1)
-        twoDimensionData.columns = ['x','y','num']
-        plotData = twoDimensionData[twoDimensionData['num']>1]
-        # sns.scatterplot(data=plotData,x='x',y='y',hue='num',size='num')
-        # plt.savefig(f'{figureD}/twoDimensionData.pcoa.pdf',height=10,width=10)
+
+        '''
+            pcoaData = pcoaData.iloc[:,0:3]
+            pcoaData.columns = ['x','y','z']
+            modId2modNum = getModId2modNum(
+                f'{danteD}/toCalRest.modSeq2modId.tab'
+            )
+            modIdList = []
+            modNumList = []
+            for modId in modId2modNum:
+                modIdList.append(modId)
+                modNumList.append(modId2modNum[modId])
+            sizeData = pd.concat([pd.Series(modIdList),
+                                  pd.Series(modNumList)],
+                                 axis=1)
+            sizeData.columns = ['id','num']
+            sizeData.sort_values(by='id',inplace=True)
+            pcoaData.reset_index(drop=True,inplace=True)
+            sizeData.reset_index(drop=True,inplace=True)
+
+            comData = pd.concat(
+                [pcoaData, sizeData],
+                axis=1
+            )
+            plotDisVsModNum(
+                comData,
+                f'{figureD}/dis_num_scatter.pdf'
+            )
+        '''
+
         shell('''
             touch {output}
         ''')

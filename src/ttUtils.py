@@ -121,12 +121,11 @@ def getModSeq2modNum(modSeq2numTabFile):
     for ind,row in tabData.iterrows():
         rel[row['seq']] = row['num']
     return rel
-def getModId2modNum(modSeq2numTabFile,modSeq2modIdTabFile):
+def getModId2modNum(modSeq2modIdTabFile):
     rel = defaultdict(int)
-    modSeq2modId = getModSeq2modId(modSeq2numTabFile)
-    modSeq2modNum = getModSeq2modNum(modSeq2modIdTabFile)
+    modSeq2modId = getModSeq2modId(modSeq2modIdTabFile)
     for modSeq in modSeq2modId:
-        rel[modSeq2modId[modSeq]] = modSeq2modNum[modSeq]
+        rel[modSeq2modId[modSeq]] = len(modSeq.split(','))
     return rel
 def getModSeq2modId(modSeq2modIdTabFile):
     tabData = pd.read_table(modSeq2modIdTabFile,sep='\t',header=None)
@@ -294,10 +293,13 @@ def getFaSeqNameDict(refFa, prefix):
             usedNum += 1
             relDict[entry.name] = f'{prefix}_{usedNum}'
     return relDict
-def transChrName(oriFaFile, prefix, b2a=False):
+def transChrName(oriFaFile, prefix, b2a=False, chrNum=None):
+
     oriChr2chr = {}
     with pysam.FastxFile(oriFaFile) as oriFa:
         for ind, entry in enumerate(oriFa):
+            if (not chrNum is None) and (ind>=chrNum):
+                break
             oriChr2chr[entry.name] = f'{prefix}_{int(ind+1)}'
     if b2a:
         chr2oriChr = {b:a for a,b in oriChr2chr.items()}

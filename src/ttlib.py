@@ -1,5 +1,6 @@
 import os
 import re
+import time
 def ttSystem(cmd):
     if os.system(cmd)!=0:
         print(f'{cmd} error!')
@@ -207,10 +208,13 @@ def plotRotate3DScatter(totalData,outFile):
     scalez = 1.0/(z.max()-z.min())
     def init():
         ax.scatter3D(x*scalex,y*scaley,z*scalez,linewidth=0.1)
-        ax.set_xlabel('$PC1$')
-        ax.set_ylabel('$PC2$')
-        ax.set_zlabel('$PC3$')
-        plt.title('Compositional Plot in 3 Dimensions')
+        ax.set_xlabel('$TSNE1$', fontdict={'fontsize': 24})
+        ax.set_ylabel('$TSNE2$', fontdict={'fontsize': 24})
+        ax.set_zlabel('$TSNE3$', fontdict={'fontsize': 24})
+        ax.set_xticklabels([])
+        ax.set_yticklabels([])
+        ax.set_zticklabels([])
+        plt.title('')
         plt.grid()
     def rotate(angle):
         ax.view_init(elev=10,azim=angle)
@@ -290,3 +294,77 @@ def plotRotate3DScatterWithColor(totalData,outFile,colorTyp='num',colorDict = No
 
         rot_animation = animation.FuncAnimation(fig, rotate, init_func=init, frames=np.arange(0, 362, 2), interval=50)
         rot_animation.save(outFile, dpi=80, writer='imagemagick')
+def qsub(baseD, commands, taskName, threads, pbsFileName='tmp.pbs', nodes=1):
+    pbsF = f'{baseD}/{pbsFileName}'
+    with open(pbsF, 'w') as of:
+        print(commands, file=of)
+    os.system(f'''
+        cd {baseD}
+        qsub {pbsF} -N {taskName} \
+                    -l walltime=9999:00:00 \
+                    -l nodes={nodes}:ppn={threads} \
+    ''')
+    time.sleep(2)
+
+def plotDisVsModNum(tpdf, outPdf):
+    from copy import deepcopy
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from scipy.stats import spearmanr
+    sns.set_style('ticks')
+    tpdf = deepcopy(tpdf)
+
+    tpdf = tpdf.dropna()
+
+    tpdf['dis'] = tpdf.apply(
+        lambda row: np.linalg.norm(np.array(row[['x', 'y', 'z']])),
+        axis=1
+    )
+    corr, p_value = spearmanr(tpdf.dis, tpdf.num)
+    fig, ax = plt.subplots()
+    sns.scatterplot(
+        tpdf,
+        x='dis',
+        y='num',
+        linewidth=0,
+        ax=ax,
+        s=8
+    )
+    ax.text(
+        .1, .9,
+        f'Spearman: {corr:.2f}',
+        fontsize=18,
+        transform=plt.gca().transAxes
+    )
+    plt.xticks(fontsize=18)
+    plt.yticks(fontsize=18)
+    ax.set_xlabel('Distance to center', fontdict={'fontsize': 18})
+    ax.set_ylabel('Modular sequence length', fontdict={'fontsize': 18})
+    ax.spines[['top', 'right']].set_visible(False)
+    plt.savefig(outPdf, bbox_inches='tight')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

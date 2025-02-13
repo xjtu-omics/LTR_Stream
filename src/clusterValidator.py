@@ -1,13 +1,22 @@
+import pickle
+
 import pysam
 import pandas as pd
 import numpy as np
 from itertools import combinations
 from scipy.stats import wilcoxon, ranksums
 
+import seaborn as sns
+sns.set_style("ticks")
+import matplotlib.pyplot as plt
+
+
 from fileSysSupplier import fileSysSupplier
 
 from validation.p2pValidation import p2pValidator
 from validation.protDomainValidation import crossChangeValidator
+from infoIntegrator import infoIntegrator
+
 class clusterValidator:
     def __init__(self, ii, ltrParaFile, filtCentPerc=20):
         self.ii = ii
@@ -60,7 +69,7 @@ class clusterValidator:
             if onlyMinimum:
                 foldChange = min(otherMeans)/selfMean
                 stat, pv = ranksums(Class2idens[min(Class2mean)], Class2idens[tarClass], alternative='greater')
-                return pd.Series([foldChange, pv], index=['foldChange', 'p-value'])
+                return pd.Series([tarClass, foldChange, pv], index=['Sub-lineage', 'foldChange', 'p-value'])
             else:
                 tarClasses = []
                 foldChanges = otherMeans/selfMean
@@ -82,12 +91,14 @@ class clusterValidator:
             subDf = self.ii.filterDf(Classes, zoomInLevel)
         else:
             subDf = self.ii.infoDf[self.ii.infoDf.isTerminalCluster==True]
+        subDf['Class'] = subDf['finalClass']
         toValClassSer = subDf.Class.drop_duplicates()
         diffScoreDf = toValClassSer.apply(calEachClassDiffScore,
                                           idenMat=p2pIdenMat,
                                           toValClassSer=toValClassSer,
                                           onlyMinimum=onlyMinimum)
         diffScoreDf.index = list(toValClassSer)
+
         if onlyMinimum:
             return diffScoreDf
         else:
@@ -95,3 +106,68 @@ class clusterValidator:
             for ind, df in diffScoreDf.items():
                 relDf = pd.concat([relDf, df], axis=0)
             return relDf
+    @classmethod
+    def plotNuclPairwiseHeatmap(cls, pkl, infoTsv, outPdf=None):
+
+        from palettable.cartocolors.sequential import Peach_4
+        from palettable.cmocean.sequential import Amp_3
+        from palettable.scientific.sequential import LaJolla_13
+
+        identityMatDf = pickle.load(open(pkl, 'rb'))
+        identityMatDf = 100 - identityMatDf
+        ii = infoIntegrator.init_fromTsv(infoTsv)
+        class2finalClass = ii.getClass2finalClass()
+        classes = sorted(list(class2finalClass.keys()))
+        colors = list(sns.color_palette('pastel', len(classes)).as_hex())
+        class2color = dict(zip(classes, colors))
+        col_colors = list(pd.Series(list(identityMatDf.index)).apply(lambda x:x.split('__')[0]).map(class2color))
+        print(col_colors)
+        g = sns.clustermap(
+            identityMatDf,
+            col_cluster=False,
+            row_cluster=False,
+            row_colors=col_colors,
+            col_colors=col_colors,
+            cmap=LaJolla_13.mpl_colormap,
+        )
+        g.ax_heatmap.set_xticks([])
+        g.ax_heatmap.set_yticks([])
+        g.ax_heatmap.set_xlabel('')
+        g.ax_heatmap.set_ylabel('')
+        if outPdf is not None:
+            plt.savefig(outPdf, bbox_inches='tight', dpi=300)
+        plt.show()
+        plt.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
