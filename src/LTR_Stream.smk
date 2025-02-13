@@ -485,7 +485,7 @@ rule calModSeqDistance:
              python calModSeqDistance.py {danteD} {threads} {f'{danteD}/toCalRest.modSeqList.pkl'}
              touch {output}
         """)
-rule pcoaPlot:
+rule tsnePlot:
     input:  f'{statusD}/calModSeqDistance.ok'
     output: f'{statusD}/pcoaPlot.ok'
     run:
@@ -510,7 +510,7 @@ rule pcoaPlot:
         pcoaData = pd.DataFrame(pcoaRel)
 
         pcoaData.to_csv(f'{danteD}/toCalRest.pcoaDis.csv',header=None,index=None)
-        plotRotate3DScatter(pcoaData,f'{figureD}/pcoaDistance.3d.gif')
+        plotRotate3DScatter(pcoaData,f'{figureD}/tsneDistance.3d.gif')
 
         '''
             pcoaData = pcoaData.iloc[:,0:3]
