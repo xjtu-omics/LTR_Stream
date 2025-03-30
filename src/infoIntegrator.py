@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import ttUtils
 import pysam
+from copy import deepcopy
 import ttDb
 from fileSysSupplier import fileSysSupplier
 
@@ -145,8 +146,41 @@ class infoIntegrator:
         zoomInLevelSer = pd.Series(zoomInLevelList, index=self.infoDf.index, dtype=int)
         self.infoDf['zoomInLevel'] = zoomInLevelSer
         self.setInfoDf()
+    def addCreditLabel(self):
+        def getCreditCutOffVal(infoDf):
+            infoDf = deepcopy(infoDf)
+            if not infoDf.isTerminalCluster.iloc[0]:
+                return None
+            else:
+                disSer = infoDf.apply(
+                    lambda row: np.sqrt(row.x*row.x + row.y*row.y + row.z*row.z),
+                    axis=1
+                )
+                return 0.1*disSer.quantile(.95)
+        def getCreditLabel(cutoff, x, y, z):
+            if cutoff is None:
+                return 'Not_final_zoomIn'
+            dis = np.sqrt(x*x + y*y + z*z)
+            if dis>=cutoff:
+                return 'Confident'
+            else:
+                return 'Low_confidence'
+        df = deepcopy(self.infoDf)
+        cutOffSer = df.groupby('zoomIn').apply(
+            getCreditCutOffVal
+        )
+        zoomIn2cutOff = cutOffSer.to_dict()
+        labelSer = df.apply(
+            lambda row: getCreditLabel(
+                zoomIn2cutOff[row.zoomIn], row.x, row.y, row.z
+            ),
+            axis=1
+        )
+        self.infoDf['creditLabel'] = labelSer
+
     def writeRel(self, outTsv='classInfo.tsv'):
         self.addZoomInLevel()
+        self.addCreditLabel()
         outPath = f'{self.fss.figureD}/{outTsv}'
         self.infoDf.to_csv(outPath, sep='\t', index=False)
     def getZoomInList(self):
