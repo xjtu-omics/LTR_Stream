@@ -123,7 +123,8 @@ minClusterSize  50
 
 # Other parameters
 
-# tsneLearningRate: For t-SNE dimensionality reduction, LTR_Stream requires a very small learning rate, with a default value of 6. It is not recommended to set this value higher than 8.
+# tsneLearningRate: For t-SNE dimensionality reduction, LTR_Stream requires a very small learning rate, 
+# with a default value of 6. It is not recommended to set this value higher than 8.
 tsneLearningRate    6
 
 
