@@ -177,12 +177,25 @@ class infoIntegrator:
             axis=1
         )
         self.infoDf['creditLabel'] = labelSer
-
+    def getTransNameDict(self):
+        transNameDf = pd.read_csv(
+            f'{self.fss.danteD}/inputId.tsv',
+            sep='\t',
+            header=None
+        )
+        transNameDf.columns = ['oriId', 'bainfoId']
+        transDict = transNameDf.set_index('bainfoId').to_dict()['oriId']
+        return transDict
     def writeRel(self, outTsv='classInfo.tsv'):
+        import os
         self.addZoomInLevel()
         self.addCreditLabel()
         outPath = f'{self.fss.figureD}/{outTsv}'
-        self.infoDf.to_csv(outPath, sep='\t', index=False)
+        tmpDf = deepcopy(self.infoDf)
+        if os.path.lexists(f'{self.fss.danteD}/inputId.tsv'):
+            transNameDict = self.getTransNameDict()
+            tmpDf['oriId'] = tmpDf.oriId.map(transNameDict)
+        tmpDf.to_csv(outPath, sep='\t', index=False)
     def getZoomInList(self):
         return list(self.infoDf['zoomIn'].drop_duplicates())
     '''
@@ -250,11 +263,16 @@ class infoIntegrator:
         self.infoDf['Cluster'] = self.infoDf.Class.map(Class2outLabel)
         self.setInfoDf()
     def writeUserRel(self, prefix, outTsv='clusterRel.tsv'):
+        import os
         self.addUserLabel(prefix)
         userInfoDf = self.infoDf.copy(deep=True)
         userInfoDf = userInfoDf[userInfoDf.isTerminalCluster==True]
         userInfoDf = userInfoDf[['oriId', 'Cluster']]
         outPath = f'{self.fss.figureD}/{outTsv}'
+
+        if os.path.lexists(f'{self.fss.danteD}/inputId.tsv'):
+            transDict = self.getTransNameDict()
+            userInfoDf['oriId'] = userInfoDf.oriId.map(transDict)
         userInfoDf.to_csv(outPath, sep='\t', index=False)
     def reformatZoomInOrder(self, prefix, zoomInAdataDict):
         # def updateTransDict(tmpDf, transDict):

@@ -14,6 +14,11 @@ import ttStream
 import networkx as nx
 import pysam
 
+def getInputFa(recOk):
+    with open(recOk, 'r') as iok:
+        for line in iok:
+            return line.strip()
+
 def getChrm2speId(chrm):
     return chrm.split('_')[0]
 def seqName2bainfo(seqName):

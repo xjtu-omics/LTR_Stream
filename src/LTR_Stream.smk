@@ -14,7 +14,7 @@ import ttlib
 
 globConfiger = ttConfiger.ttConfiger(config['ltrParaFile'])
 def setGlobBaseParas():
-    global baseD, inputFasta, minOverLapForNovelModule, topModNum, epgLambda, epgAlpha, epgMu, blastEvalue, tsneLearningRate, tsnePerplexity, tsneEarlyExaggeration, outPrefix, refConfig, cluCentCut
+    global baseD, inputFasta, minOverLapForNovelModule, topModNum, epgLambda, epgAlpha, epgMu, blastEvalue, tsneLearningRate, tsnePerplexity, tsneEarlyExaggeration, outPrefix, refConfig, cluCentCut, minClusterSize
     global maxZoomInLevel
     baseD = globConfiger.baseD
     inputFasta = globConfiger.ltrFa
@@ -31,6 +31,7 @@ def setGlobBaseParas():
     refConfig = globConfiger.refConfig
     cluCentCut = globConfiger.cluCentCut
     maxZoomInLevel = globConfiger.maxZoomInLevel
+    minClusterSize = globConfiger.minClusterSize
 def prepareWorkDir():
     global statusD,testD,blastD,configD,rawRefD,refD,ltrFinderD,ltrHarvestD,ltrRetrieverD,danteD,plotD,figureD,tesorterD,subphaserD
     envDirs = []
@@ -83,11 +84,47 @@ setGlobBaseParas()
 prepareWorkDir()
 rule tar:
     input: f'{statusD}/stream.ok'
+rule checkInputFastName:
+    input: inputFasta
+    output: f'{statusD}/checkInputFastName.ok'
+    run:
+        import pysam
+        from ttUtils import seqName2bainfo
+        checkFlag = True
+        with pysam.FastaFile(inputFasta) as ifa:
+            seqs = ifa.references
+            for seq in seqs:
+                try:
+                    seqName2bainfo(seq)
+                except:
+                    checkFlag = False
+                    break
+
+        if not checkFlag:
+            with pysam.FastaFile(inputFasta) as ifa, \
+                 open(f'{baseD}/reInput.fa', 'w') as ofa, \
+                 open(f'{danteD}/inputId.tsv', 'w') as oTsv:
+                seqs = ifa.references
+                for ind, seq in enumerate(seqs):
+                    seqAGCT = ifa.fetch(seq)
+                    seqLen = len(seqAGCT)
+                    seqId = f'chr{ind+1}:0-{seqLen}(+)'
+                    print(f'>{seqId}', file=ofa)
+                    print(f'{seqAGCT}', file=ofa)
+                    print(f'{seq}\t{seqId}', file=oTsv)
+
+        with open(f'{statusD}/checkInputFastName.ok', 'w') as ook:
+            if checkFlag:
+                print(inputFasta, file=ook)
+            else:
+                print(f'{baseD}/reInput.fa', file=ook)
 rule getNovelFasta:
-    input:  inputFasta
+    input:  f'{statusD}/checkInputFastName.ok'
     output: f'{statusD}/getNovelFasta.ok'
     run:
         import pysam
+        from ttUtils import getInputFa
+        inputFasta = getInputFa(f'{statusD}/checkInputFastName.ok')
         with open(f'{danteD}/ori2restId.tab','a') as of:
             with pysam.FastxFile(inputFasta) as faf:
                 for entry in faf:
@@ -549,14 +586,16 @@ rule stream:
     output: f'{statusD}/stream.ok'
     threads: 48
     run:
+        from ttUtils import getInputFa
         tesorterOutFile = None
         with open(f'{danteD}/streamLabels.csv','w') as of:
             for _ in open(f'{danteD}/toCalRest.pcoaDis.csv','r'):
                 print('LTR_RT',file=of)
+        inputFasta = getInputFa(f'{statusD}/checkInputFastName.ok')
         shell(f'''
             python streamCollDetect.py {baseD} {danteD}/streamLabels.csv {refConfig} \
                                        {epgLambda} {epgAlpha} {epgMu} {maxZoomInLevel} \
                                        {tsneLearningRate} {tsnePerplexity} {tsneEarlyExaggeration} \
-                                       {cluCentCut} {outPrefix} {tesorterOutFile} {inputFasta} {config['ltrParaFile']}
+                                       {cluCentCut} {outPrefix} {minClusterSize} {tesorterOutFile} {inputFasta} {config['ltrParaFile']} 
             touch {output}
         ''')

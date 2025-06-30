@@ -76,6 +76,10 @@ class ttConfiger:
             self.tsneEarlyExaggeration = float(tmpParaDict['tsneEarlyExaggeration'])
         except:
             self.tsneEarlyExaggeration = 6
+        try:
+            self.minClusterSize = int(tmpParaDict['minClusterSize'])
+        except:
+            self.minClusterSize = 50
         self.tarSpeStrSet = self.getTarSpeStrSet(tmpParaDict)
     def getTarSpeStrSet(self, tmpParaDict):
         tarSpeStrSet = set()

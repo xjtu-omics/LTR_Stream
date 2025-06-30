@@ -66,9 +66,7 @@ parameter debugging, the parameters that significantly impact the clustering res
 workDir /xx/xx/xx
 
 # ltrFasta: The nucleotide sequences of the LTR-RT set you want to 
-# analyze. Please ensure it is in standard FASTA format. Names of these
-# sequences should follow the format like 'chrxx:stPos-endPos(strand)'. It 
-# is recommended to use bedtools to extract sequences from the genome.
+# analyze. Please ensure it is in standard FASTA format.
 ltrFasta    /xx/xx/xx.fa
 
 
@@ -118,11 +116,16 @@ cluCentCut  0.1
 # unreliable, you can set a maximum limit. The default value is -1, which means no limit is set. 
 maxZoomInLevel  -1
 
+# minClusterSize: Clusters containing fewer Module sequences will be considered noise and filtered 
+# out. If the number of clustered LTR-RTs is low, it is recommended to reduce the threshold accordingly. 
+# Default is 50.
+minClusterSize  50
 
 # Other parameters
 
 # tsneLearningRate: For t-SNE dimensionality reduction, LTR_Stream requires a very small learning rate, with a default value of 6. It is not recommended to set this value higher than 8.
 tsneLearningRate    6
+
 
 
 # blastEvalue: Used for homology searching in BLASTn. Default is 1e-10. If the LTR-RT sequence set to 
@@ -153,3 +156,5 @@ TSV file recording foldchange of inter- and intra-distance and corresponding sig
 #### workDir/figure/coverLine.pdf
 Line plot showing module number and corresponding covered LTR-RT percentage. Used for guiding parameter ajustment.
 
+## Citation
+Xu, Tun, et al. "Deciphering complex interactions between LTR retrotransposons and three Papaver species using LTR_Stream." bioRxiv (2025): 2025-03.

@@ -4821,6 +4821,7 @@ def preZoomInValidBranchCluId(adata, prefix, oriDisMat, tarIndList, tsneLearning
     #     posDf = caliPosDfWithNewCenter(adata, posDf, 0.01)
     posDf, topMinModLen, globMinModLen = pfCordZeroIsAnsZero(adata, posDf)
     posDf_2d = posDf_2d.loc[posDf.index]
+    # print('Filter:', topMinModLen, globMinModLen)
     if (maxZoomInLevel>0 and zoomInLevel>maxZoomInLevel) \
             or topMinModLen > globMinModLen+1:
         print('===')

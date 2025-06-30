@@ -35,18 +35,20 @@ tsnePerplexity = float(sys.argv[9])
 tsneEarlyExaggeration = float(sys.argv[10])
 cluCentCut = float(sys.argv[11])
 prefix = sys.argv[12]
+minClusterSize = int(sys.argv[13])
+
 tesorterOutFile = None
 try:
-    tesorterOutFile = sys.argv[13]
+    tesorterOutFile = sys.argv[14]
 except:
     pass
 
 ltrFastaFile = None
 try:
-    ltrFastaFile = sys.argv[14]
+    ltrFastaFile = sys.argv[15]
 except:
     pass
-ltrParaFile = sys.argv[15]
+ltrParaFile = sys.argv[16]
 
 envDirs.append(baseD)
 danteD = f'{baseD}/dante'
@@ -107,7 +109,7 @@ except:
     pass
 
 zoomInAdataDict = {}
-inte = st.zoomIn(adata_low, oriDisMat, list(range(oriDisMat.shape[0])), tsneLearningRate, tsnePerplexity, tsneEarlyExaggeration, epgLambda, epgAlpha, epgMu, prefix, modId2insTimeSet, ltrFastaFile, zoomInAdataDict=zoomInAdataDict, zoomInLevel=1, maxZoomInLevel=maxZoomInLevel, cluCentCut=cluCentCut)
+inte = st.zoomIn(adata_low, oriDisMat, list(range(oriDisMat.shape[0])), tsneLearningRate, tsnePerplexity, tsneEarlyExaggeration, epgLambda, epgAlpha, epgMu, prefix, modId2insTimeSet, ltrFastaFile, minNumOfBranch=minClusterSize, zoomInAdataDict=zoomInAdataDict, zoomInLevel=1, maxZoomInLevel=maxZoomInLevel, cluCentCut=cluCentCut)
 zoomInAdataDict = inte.reformatZoomInOrder(prefix, zoomInAdataDict)
 
 inte.geneFinalClassLabel()

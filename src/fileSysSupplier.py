@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 
 import ttConfiger
@@ -8,7 +9,10 @@ class fileSysSupplier:
         self.ltrParaFile = ltrParaFile
         paraDict = ttConfiger.getParaDict(ltrParaFile)
         self.baseD = paraDict['workDir']
-        self.ltrFasta = paraDict['ltrFasta']
+        if os.path.lexists(f'{self.baseD}/reInput.fa'):
+            self.ltrFasta = f'{self.baseD}/reInput.fa'
+        else:
+            self.ltrFasta = paraDict['ltrFasta']
         try:
             self.configFile = paraDict['refConfigTsv']
         except:
