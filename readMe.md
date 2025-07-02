@@ -139,6 +139,32 @@ epgLambda   0.01
 epgMu   0.01
 epgAlpha 0.05
 ```
+### Parameter adjustment
+Due to differences in dataset size and the degree of internal sequence consistency, the parameters of LTR_Stream need to be adjusted according to each dataset. The two most critical parameters are `minOverlap` and `tsnePerplexity`. LTR_Stream provides intermediate visualizations to assist with parameter tuning. 
+Before tuning the parameters, please run LTR_Stream.smk with the default settings. If no clustering results are produced or the results are unsatisfactory, proceed with parameter adjustment.
+Specifically, please begin by determining an appropriate value for minOverlap.
+#### minOverlap adjustment
+Based on our testing, the value of minOverlap typically falls within the range of 0.75 to 0.99. After modifying this parameter, please re-run the following command — this will generate the file `figure/coverLine.pdf`. Use this file to adjust minOverlap accordingly. A specific example and guidance is shown in the figure below.
+<div align=center>
+    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/main/.readMe_images/minOverlap.png" width="700px" height="443px" />
+</div>
+
+```bash
+snakemake -s LTR_Stream.smk -f staNovelSelectedNumVsCovered -R selectNovelUnits --config ltrParaFile=/path/to/ltrPara.tab -j {threads}
+```
+After setting an appropriate `minOverlap` value, please proceed to adjust `tsnePerplexity`.
+#### tsnePerplexity adjustment
+The parameter tsnePerplexity is primarily related to the dataset size and does not have a fixed optimal range. For datasets with around 10,000 sequences, a value between 100 and 200 may be appropriate. For smaller datasets with only a few hundred sequences, values between 10 and 100 are typically suitable. After each adjustment, please run the following command — LTR_Stream will update the corresponding file `figure/tsneDistance.3d.gif`. Please adjust this parameter based on the example provided in the figure below.
+```bash
+snakemake -s LTR_Stream.smk -f tsnePlot -R mergeModules --config ltrParaFile=/path/to/ltrPara.tab -j {threads}
+```
+<div align=center>
+    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/main/.readMe_images/tsnePerplexity.png" width="700px" height="443px" />
+</div>
+After completing these two parameter tuning steps, please run the following command to perform clustering.
+```bash
+snakemake -s LTR_Stream.smk -f stream -R stream --config ltrParaFile=/path/to/ltrPara.tab -j {threads}
+```
 
 ### Outputs
 All outputs will be saved in workDir/figure
