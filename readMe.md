@@ -146,7 +146,7 @@ Specifically, please begin by determining an appropriate value for minOverlap.
 #### minOverlap adjustment
 Based on our testing, the value of minOverlap typically falls within the range of 0.75 to 0.99. After modifying this parameter, please re-run the following command — this will generate the file `figure/coverLine.pdf`. Use this file to adjust minOverlap accordingly. A specific example and guidance is shown in the figure below.
 <div align=center>
-    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/main/.readMe_images/minOverlap.png" width="700px" height="443px" />
+    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/main/.readMe_images/minOverlap.png" width="700px" height="220px" />
 </div>
 
 ```bash
@@ -159,9 +159,10 @@ The parameter tsnePerplexity is primarily related to the dataset size and does n
 snakemake -s LTR_Stream.smk -f tsnePlot -R mergeModules --config ltrParaFile=/path/to/ltrPara.tab -j {threads}
 ```
 <div align=center>
-    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/main/.readMe_images/tsnePerplexity.png" width="700px" height="443px" />
+    <img src="https://github.com/xjtu-omics/LTR_Stream/blob/main/.readMe_images/tsnePerplexity.png" width="700px" height="220px" />
 </div>
 After completing these two parameter tuning steps, please run the following command to perform clustering.
+
 ```bash
 snakemake -s LTR_Stream.smk -f stream -R stream --config ltrParaFile=/path/to/ltrPara.tab -j {threads}
 ```
