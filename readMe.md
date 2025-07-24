@@ -185,4 +185,4 @@ TSV file recording foldchange of inter- and intra-distance and corresponding sig
 Line plot showing module number and corresponding covered LTR-RT percentage. Used for guiding parameter ajustment.
 
 ## Citation
-Xu, Tun, et al. "Deciphering complex interactions between LTR retrotransposons and three Papaver species using LTR_Stream." bioRxiv (2025): 2025-03.
+Xu, Tun, et al. "Deciphering complex interactions between LTR retrotransposons and three Papaver species using LTR_Stream." Genomics, Proteomics & Bioinformatics (2025): qzaf061.
